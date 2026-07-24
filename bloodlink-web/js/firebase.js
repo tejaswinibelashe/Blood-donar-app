@@ -2,15 +2,16 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getDatabase, ref, push, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// Firebase configuration using extracted credentials from google-services.json
+// Firebase configuration for blood-donar-finder-7187a
 const firebaseConfig = {
-  apiKey: "AIzaSyAgm8hVDmsyalJHsR4bjLyNX4-Tb_xb9WU",
-  authDomain: "link-blood-bdaad.firebaseapp.com",
-  databaseURL: "https://link-blood-bdaad-default-rtdb.firebaseio.com",
-  projectId: "link-blood-bdaad",
-  storageBucket: "link-blood-bdaad.appspot.com",
-  messagingSenderId: "123456789", // Placeholder, not strictly required for Auth/DB
-  appId: "1:123456789:web:abcdef" // Placeholder, not strictly required for Auth/DB in v10 for some services
+  apiKey: "AIzaSyDmb0dMu3ae_5INJkqMS1rJs0GKesQ88kc",
+  authDomain: "blood-donar-finder-7187a.firebaseapp.com",
+  databaseURL: "https://blood-donar-finder-7187a-default-rtdb.firebaseio.com",
+  projectId: "blood-donar-finder-7187a",
+  storageBucket: "blood-donar-finder-7187a.firebasestorage.app",
+  messagingSenderId: "685067249547",
+  appId: "1:685067249547:web:5ca20caf67fb84fb04b18e",
+  measurementId: "G-7N94SLSGV4"
 };
 
 // Initialize Firebase
