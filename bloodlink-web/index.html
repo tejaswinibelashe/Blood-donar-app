@@ -163,6 +163,18 @@
                 <div class="input-group">
                     <input type="number" id="donor-age" placeholder="Age" min="18" max="65" required>
                 </div>
+                <div class="input-group">
+                    <input type="number" id="donor-weight" placeholder="Weight (kg)" min="50" required>
+                </div>
+                <div class="input-group">
+                    <input type="date" id="donor-last-date" title="Last Donation Date">
+                </div>
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label style="display: flex; align-items: center; gap: 10px; color: white;">
+                        <input type="checkbox" id="donor-diseases" style="width: 20px; height: 20px;"> 
+                        I confirm I have no severe underlying diseases.
+                    </label>
+                </div>
                 <button type="submit" class="primary-btn" style="background: var(--success)"><i class="ri-user-add-line"></i> Register as Donor</button>
             </form>
             <p id="request-status-msg" class="hidden mt-20" style="text-align: center; font-weight: bold;"></p>
@@ -182,11 +194,22 @@
 
         <!-- About Us Section -->
         <section id="about-section" class="hidden glass-panel">
-            <h2><i class="ri-information-line" style="color: var(--primary-color)"></i> About Us</h2>
-            <div style="line-height: 1.8;">
-                <p>BloodLink is a revolutionary platform designed to bridge the gap between blood donors and those in critical need.</p>
-                <p>Our mission is to eliminate blood shortages in emergencies by providing a real-time, location-based network connecting hospitals, patients, and willing donors.</p>
-                <p>Founded in 2026, BloodLink integrates seamlessly across Mobile and Web applications to ensure nobody has to wait when a life is on the line.</p>
+            <h2><i class="ri-information-line" style="color: var(--primary-color)"></i> About BloodLink</h2>
+            <div style="line-height: 1.8; text-align: left;">
+                <p><strong>BloodLink</strong> is a revolutionary platform designed to bridge the gap between blood donors and those in critical need.</p>
+                <div class="stat-card" style="margin: 20px 0; border-left: 4px solid var(--primary-color); background: rgba(255,255,255,0.05);">
+                    <h3 style="color: var(--primary-color)">Our Mission</h3>
+                    <p>To eliminate blood shortages in emergencies by providing a real-time, location-based network connecting hospitals, patients, and willing donors.</p>
+                </div>
+                <h4 style="margin-top: 15px;">Why we started</h4>
+                <p>Founded in 2026, we recognized that millions of lives are lost simply because blood isn't available exactly when and where it's needed. Traditional blood banks are often disconnected from immediate emergency situations.</p>
+                <br>
+                <h4 style="margin-top: 15px;">How it Works</h4>
+                <ul style="list-style-type: none; padding-left: 0;">
+                    <li><i class="ri-check-line" style="color: var(--success)"></i> <strong>Real-time Sync:</strong> Integrates seamlessly across Mobile and Web applications.</li>
+                    <li><i class="ri-check-line" style="color: var(--success)"></i> <strong>Location Based:</strong> Finds the absolute closest donors to minimize wait times.</li>
+                    <li><i class="ri-check-line" style="color: var(--success)"></i> <strong>Verified Hospitals:</strong> Works directly with trusted local hospitals.</li>
+                </ul>
             </div>
         </section>
 

@@ -351,7 +351,15 @@ if (donorForm) {
         const phone = document.getElementById('donor-phone').value;
         const location = document.getElementById('donor-location').value;
         const age = document.getElementById('donor-age').value;
+        const weight = document.getElementById('donor-weight').value;
+        const lastDate = document.getElementById('donor-last-date').value;
+        const diseases = document.getElementById('donor-diseases').checked;
         
+        if (!diseases) {
+            alert("You must confirm you have no severe underlying diseases to register as a donor.");
+            return;
+        }
+
         const donorId = auth.currentUser ? auth.currentUser.uid : Date.now().toString();
         const userRef = ref(db, 'users/' + donorId);
         
@@ -361,19 +369,23 @@ if (donorForm) {
             contact: phone,
             location,
             age,
+            weight,
+            lastDonationDate: lastDate,
             isDonor: true,
             status: "Available"
         }).then(() => {
             donorForm.reset();
-            const msg = document.getElementById('donor-status-msg');
-            msg.textContent = "Successfully registered as a donor!";
-            msg.style.color = "var(--success)";
-            msg.classList.remove('hidden');
-            
-            setTimeout(() => {
-                msg.classList.add('hidden');
-                switchSection('nearby-donors-section');
-            }, 3000);
+            const msg = document.getElementById('request-status-msg');
+            if(msg) {
+                msg.textContent = "Successfully registered as a donor!";
+                msg.style.color = "var(--success)";
+                msg.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    msg.classList.add('hidden');
+                    switchSection('nearby-donors-section');
+                }, 3000);
+            }
         });
     });
 }
