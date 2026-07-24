@@ -45,9 +45,13 @@
                     <i class="ri-lock-password-line"></i>
                     <input type="password" id="password" placeholder="Password" required>
                 </div>
-                <button type="submit" class="primary-btn">Sign In</button>
+                <button type="submit" id="auth-submit-btn" class="primary-btn">Sign In</button>
             </form>
             <p id="auth-error" class="error-text hidden"></p>
+            <p class="mt-20" style="font-size: 0.9rem; color: var(--text-muted);">
+                <span id="auth-toggle-text">Don't have an account?</span> 
+                <a href="#" id="auth-toggle-btn" style="color: var(--primary-color); text-decoration: none; font-weight: bold;">Sign Up</a>
+            </p>
         </section>
 
         <!-- Dashboard Section -->

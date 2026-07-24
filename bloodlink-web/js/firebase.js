@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getDatabase, ref, push, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 // Firebase configuration using extracted credentials from google-services.json
@@ -19,4 +19,4 @@ export const auth = getAuth(app);
 export const db = getDatabase(app);
 
 // Export Firebase methods
-export { signInWithEmailAndPassword, onAuthStateChanged, signOut, ref, push, onValue, set };
+export { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, ref, push, onValue, set };

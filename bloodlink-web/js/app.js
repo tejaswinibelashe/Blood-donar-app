@@ -1,4 +1,4 @@
-import { auth, db, signInWithEmailAndPassword, onAuthStateChanged, signOut, ref, push, onValue, set } from './firebase.js';
+import { auth, db, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, ref, push, onValue, set } from './firebase.js';
 
 // DOM Elements
 const header = document.getElementById('main-header');
@@ -10,6 +10,11 @@ const requestSection = document.getElementById('request-section');
 const loginForm = document.getElementById('login-form');
 const authError = document.getElementById('auth-error');
 const logoutBtn = document.getElementById('logout-btn');
+const authSubmitBtn = document.getElementById('auth-submit-btn');
+const authToggleBtn = document.getElementById('auth-toggle-btn');
+const authToggleText = document.getElementById('auth-toggle-text');
+
+let isLoginMode = true;
 
 const userDisplayName = document.getElementById('user-display-name');
 const recentRequestsCount = document.getElementById('recent-requests-count');
@@ -73,21 +78,59 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// Login Handler
+// Auth Toggle Logic
+authToggleBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    isLoginMode = !isLoginMode;
+    if (isLoginMode) {
+        authSubmitBtn.textContent = 'Sign In';
+        authToggleText.textContent = "Don't have an account?";
+        authToggleBtn.textContent = "Sign Up";
+    } else {
+        authSubmitBtn.textContent = 'Create Account';
+        authToggleText.textContent = "Already have an account?";
+        authToggleBtn.textContent = "Sign In";
+    }
+    authError.classList.add('hidden');
+});
+
+// Login/Signup Handler
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-            loginForm.reset();
-            authError.classList.add('hidden');
-        })
-        .catch((error) => {
-            authError.textContent = error.message;
-            authError.classList.remove('hidden');
-        });
+    if (isLoginMode) {
+        signInWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                loginForm.reset();
+                authError.classList.add('hidden');
+            })
+            .catch((error) => {
+                authError.textContent = error.message;
+                authError.classList.remove('hidden');
+            });
+    } else {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Also create user node in RTDB
+                const uid = userCredential.user.uid;
+                set(ref(db, 'users/' + uid), {
+                    email: email,
+                    name: email.split('@')[0],
+                    bloodGroup: "Unknown",
+                    location: "Unknown",
+                    contact: "Unknown"
+                }).then(() => {
+                    loginForm.reset();
+                    authError.classList.add('hidden');
+                });
+            })
+            .catch((error) => {
+                authError.textContent = error.message;
+                authError.classList.remove('hidden');
+            });
+    }
 });
 
 // Logout Handler
