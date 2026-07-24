@@ -136,7 +136,10 @@
         <!-- Become a Donor Section -->
         <section id="become-donor-section" class="hidden glass-panel">
             <h2><i class="ri-hand-heart-line" style="color: var(--primary-color)"></i> Become a Donor</h2>
-            <p style="color: var(--text-muted); margin-bottom: 1rem;">Register your details to save lives in your community.</p>
+            <div style="text-align: left; margin-bottom: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border-left: 4px solid var(--primary-color);">
+                <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">Why Donate?</h4>
+                <p style="font-size: 0.9rem; line-height: 1.6;">Every drop counts! By registering as a donor, you are taking a pledge to help patients during life-threatening emergencies. Please ensure you have had a good meal, are fully hydrated, and weigh at least 50kg before your donation.</p>
+            </div>
             <form id="become-donor-form">
                 <div class="input-group">
                     <input type="text" id="donor-name" placeholder="Full Name" required>
@@ -182,13 +185,28 @@
 
         <!-- Profile Section -->
         <section id="profile-section" class="hidden glass-panel">
-            <h2><i class="ri-user-settings-line" style="color: var(--primary-color)"></i> My Profile</h2>
-            <div class="stat-card" style="text-align: left; max-width: 400px; margin: 0 auto;">
+            <h2><i class="ri-user-settings-line" style="color: var(--primary-color)"></i> Patient & Donor Profile</h2>
+            <div class="stat-card" style="text-align: left; max-width: 500px; margin: 0 auto;">
                 <p><strong>Email:</strong> <span id="profile-email">Loading...</span></p>
                 <p><strong>UID:</strong> <span id="profile-uid">Loading...</span></p>
-                <p><strong>Status:</strong> Active</p>
-                <br>
-                <button class="primary-btn">Edit Profile</button>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;">
+                <h4 style="color: var(--primary-color); margin-bottom: 10px;">Update Medical Profile</h4>
+                <form id="profile-update-form">
+                    <div class="input-group">
+                        <input type="text" id="profile-name" placeholder="Full Name">
+                    </div>
+                    <div class="input-group">
+                        <select id="profile-role" class="styled-select">
+                            <option value="Patient">I am a Patient</option>
+                            <option value="Donor">I am a Donor</option>
+                            <option value="Both">Both (Patient & Donor)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <textarea id="profile-history" placeholder="Any relevant medical history or current treatments?" rows="3" style="width: 100%; padding: 1rem; border-radius: 8px; border: none; background: rgba(255,255,255,0.05); color: white;"></textarea>
+                    </div>
+                    <button type="button" class="primary-btn" onclick="alert('Profile Updated Successfully!')">Save Profile</button>
+                </form>
             </div>
         </section>
 
@@ -216,12 +234,20 @@
         <!-- Contact Section -->
         <section id="contact-section" class="hidden glass-panel">
             <h2><i class="ri-mail-send-line" style="color: var(--primary-color)"></i> Contact Us</h2>
+            
+            <div class="stat-card" style="margin-bottom: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <i class="ri-customer-service-2-line" style="font-size: 2rem; color: var(--primary-color);"></i>
+                <h3 style="margin: 10px 0;">24/7 Help Centre</h3>
+                <p style="font-size: 1.5rem; font-weight: bold; color: var(--success); letter-spacing: 2px;">8074254866</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Call us anytime for urgent assistance or queries.</p>
+            </div>
+
             <form id="contact-form">
                 <div class="input-group">
                     <input type="text" placeholder="Your Name" required>
                 </div>
                 <div class="input-group">
-                    <textarea placeholder="Your Message" rows="5" style="width: 100%; padding: 1rem; border-radius: 8px; border: none; background: rgba(255,255,255,0.05); color: white;" required></textarea>
+                    <textarea placeholder="Your Message" rows="4" style="width: 100%; padding: 1rem; border-radius: 8px; border: none; background: rgba(255,255,255,0.05); color: white;" required></textarea>
                 </div>
                 <button type="submit" class="primary-btn">Send Message</button>
             </form>
