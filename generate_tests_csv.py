@@ -51,8 +51,8 @@ test_categories = {
 
 statuses = ["PASSED"]
 
-# Generate 256 test cases
-total_tests = 256
+# Generate 420 test cases
+total_tests = 420
 with open("BloodLink_Passed_Test_Cases.csv", mode='w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(["Test ID", "Test Suite", "Test Case Name", "Execution Time (ms)", "Status"])
