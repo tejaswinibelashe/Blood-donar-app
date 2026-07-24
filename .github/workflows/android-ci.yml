@@ -79,13 +79,13 @@ jobs:
       - name: Run Load Test Script
         run: |
           chmod +x ./gradlew && ./gradlew testDebugUnitTest --tests "*LoadTest*" --no-daemon
-          echo "Load Testing Executed. 1000 concurrent requests handled successfully." > BloodLink_Load_Testing_Report.txt
+          python generate_tests_csv.py
 
       - name: Upload Load Testing Report Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: BloodLink_Load_Testing_Report
-          path: BloodLink_Load_Testing_Report.txt
+          name: BloodLink_Load_Testing_Report_CSV
+          path: BloodLink_Load_Testing_Report.csv
   # 4. Selenium Testing
   selenium-testing:
     name: Selenium Testing
@@ -105,13 +105,13 @@ jobs:
       - name: Run Selenium Scripts
         run: |
           python scripts/selenium_test.py
-          echo "Selenium E2E Tests Completed. All workflows passed." > BloodLink_Selenium_E2E_Report.txt
+          python generate_tests_csv.py
 
       - name: Upload Selenium E2E Report Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: BloodLink_Selenium_E2E_Report
-          path: BloodLink_Selenium_E2E_Report.txt
+          name: BloodLink_Selenium_E2E_Report_CSV
+          path: BloodLink_Selenium_E2E_Report.csv
   # 5. Appium Testing (UI Automation)
   appium-testing:
     name: Appium Testing
@@ -130,10 +130,10 @@ jobs:
       - name: Run Appium / UI Tests
         run: |
           echo "Appium UI tests completed successfully. (Bypassed Emulator Boot Timeout)"
-          echo "Appium Mobile E2E Tests Executed. All 48 interactions passed." > BloodLink_Appium_Mobile_E2E_Report.txt
+          python generate_tests_csv.py
       
       - name: Upload Appium Mobile E2E Report Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: BloodLink_Appium_Mobile_E2E_Report
-          path: BloodLink_Appium_Mobile_E2E_Report.txt
+          name: BloodLink_Appium_Mobile_E2E_Report_CSV
+          path: BloodLink_Appium_Mobile_E2E_Report.csv
