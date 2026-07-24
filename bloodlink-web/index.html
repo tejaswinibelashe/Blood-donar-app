@@ -21,8 +21,17 @@
         </div>
         <nav>
             <button class="nav-btn active" data-target="dashboard-section"><i class="ri-dashboard-line"></i> Dashboard</button>
+            <button class="nav-btn" data-target="nearby-donors-section"><i class="ri-map-pin-user-line"></i> Nearby Donors</button>
+            <button class="nav-btn" data-target="nearby-patients-section"><i class="ri-heart-pulse-line"></i> Nearby Patients</button>
+            <button class="nav-btn" data-target="hospitals-section"><i class="ri-hospital-line"></i> Hospitals</button>
             <button class="nav-btn" data-target="search-section"><i class="ri-search-line"></i> Search Donors</button>
+            <button class="nav-btn" data-target="become-donor-section"><i class="ri-hand-heart-line"></i> Become a Donor</button>
             <button class="nav-btn" data-target="request-section"><i class="ri-add-circle-line"></i> Request Blood</button>
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 0;">
+            <button class="nav-btn" data-target="profile-section"><i class="ri-user-settings-line"></i> My Profile</button>
+            <button class="nav-btn" data-target="about-section"><i class="ri-information-line"></i> About Us</button>
+            <button class="nav-btn" data-target="contact-section"><i class="ri-mail-send-line"></i> Contact Us</button>
+            <button class="nav-btn" data-target="faq-section"><i class="ri-question-answer-line"></i> FAQ</button>
             <button id="logout-btn" class="nav-btn danger"><i class="ri-logout-box-r-line"></i> Logout</button>
         </nav>
     </header>
@@ -75,6 +84,33 @@
             </div>
         </section>
 
+        <!-- Nearby Donors Section -->
+        <section id="nearby-donors-section" class="hidden glass-panel">
+            <h2><i class="ri-map-pin-user-line" style="color: var(--primary-color)"></i> Nearby Donors</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">Donors actively sharing their location near you.</p>
+            <div id="nearby-donors-list" class="list-container">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+
+        <!-- Nearby Patients Section -->
+        <section id="nearby-patients-section" class="hidden glass-panel">
+            <h2><i class="ri-heart-pulse-line" style="color: var(--primary-color)"></i> Nearby Patients</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">Urgent patient blood requests in your region.</p>
+            <div id="nearby-patients-list" class="list-container">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+
+        <!-- Hospitals Section -->
+        <section id="hospitals-section" class="hidden glass-panel">
+            <h2><i class="ri-hospital-line" style="color: var(--primary-color)"></i> Partnered Hospitals</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">Verified hospitals with active blood banks.</p>
+            <div id="hospitals-list" class="list-container">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+
         <!-- Search Section -->
         <section id="search-section" class="hidden glass-panel">
             <h2>Search Blood Donors</h2>
@@ -94,6 +130,92 @@
             </div>
             <div id="search-results" class="list-container mt-20">
                 <!-- Populated via JS -->
+            </div>
+        </section>
+
+        <!-- Become a Donor Section -->
+        <section id="become-donor-section" class="hidden glass-panel">
+            <h2><i class="ri-hand-heart-line" style="color: var(--primary-color)"></i> Become a Donor</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">Register your details to save lives in your community.</p>
+            <form id="become-donor-form">
+                <div class="input-group">
+                    <input type="text" id="donor-name" placeholder="Full Name" required>
+                </div>
+                <div class="input-group">
+                    <select id="donor-blood-group" class="styled-select" required>
+                        <option value="" disabled selected>Select Blood Group</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <input type="tel" id="donor-phone" placeholder="Phone Number" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="donor-location" placeholder="City / Area" required>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="donor-age" placeholder="Age" min="18" max="65" required>
+                </div>
+                <button type="submit" class="primary-btn" style="background: var(--success)"><i class="ri-user-add-line"></i> Register as Donor</button>
+            </form>
+            <p id="request-status-msg" class="hidden mt-20" style="text-align: center; font-weight: bold;"></p>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile-section" class="hidden glass-panel">
+            <h2><i class="ri-user-settings-line" style="color: var(--primary-color)"></i> My Profile</h2>
+            <div class="stat-card" style="text-align: left; max-width: 400px; margin: 0 auto;">
+                <p><strong>Email:</strong> <span id="profile-email">Loading...</span></p>
+                <p><strong>UID:</strong> <span id="profile-uid">Loading...</span></p>
+                <p><strong>Status:</strong> Active</p>
+                <br>
+                <button class="primary-btn">Edit Profile</button>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about-section" class="hidden glass-panel">
+            <h2><i class="ri-information-line" style="color: var(--primary-color)"></i> About Us</h2>
+            <div style="line-height: 1.8;">
+                <p>BloodLink is a revolutionary platform designed to bridge the gap between blood donors and those in critical need.</p>
+                <p>Our mission is to eliminate blood shortages in emergencies by providing a real-time, location-based network connecting hospitals, patients, and willing donors.</p>
+                <p>Founded in 2026, BloodLink integrates seamlessly across Mobile and Web applications to ensure nobody has to wait when a life is on the line.</p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact-section" class="hidden glass-panel">
+            <h2><i class="ri-mail-send-line" style="color: var(--primary-color)"></i> Contact Us</h2>
+            <form id="contact-form">
+                <div class="input-group">
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                <div class="input-group">
+                    <textarea placeholder="Your Message" rows="5" style="width: 100%; padding: 1rem; border-radius: 8px; border: none; background: rgba(255,255,255,0.05); color: white;" required></textarea>
+                </div>
+                <button type="submit" class="primary-btn">Send Message</button>
+            </form>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq-section" class="hidden glass-panel">
+            <h2><i class="ri-question-answer-line" style="color: var(--primary-color)"></i> Frequently Asked Questions</h2>
+            <div style="text-align: left; margin-top: 1rem;">
+                <h4 style="color: var(--primary-color)">Who can donate blood?</h4>
+                <p style="margin-bottom: 1rem;">Anyone aged 18-65, weighing at least 50kg, and in good health can donate.</p>
+                
+                <h4 style="color: var(--primary-color)">Is the data synced with the mobile app?</h4>
+                <p style="margin-bottom: 1rem;">Yes! The web application and Android application share the exact same real-time database.</p>
+                
+                <h4 style="color: var(--primary-color)">How quickly are emergency requests broadcasted?</h4>
+                <p>Instantly. As soon as you hit submit, all active donors in your vicinity are notified.</p>
             </div>
         </section>
 
