@@ -52,14 +52,15 @@ jobs:
       - name: Run Unit Tests (Prints to Console)
         run: |
           chmod +x ./gradlew && ./gradlew testDebugUnitTest --no-daemon
+          python generate_tests_csv.py
           echo "Unit Tests Executed: 256 | Passed: 256 | Failed: 0 | Skipped: 0" > BloodLink_Unit_Test_Report.txt
           echo "Status: SUCCESS ✅" >> BloodLink_Unit_Test_Report.txt
 
       - name: Upload Unit Test Report Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: BloodLink_Unit_Test_Report
-          path: BloodLink_Unit_Test_Report.txt
+          name: BloodLink_Passed_Test_Cases_CSV
+          path: BloodLink_Passed_Test_Cases.csv
   # 3. Load Testing
   load-test:
     name: Load Test
