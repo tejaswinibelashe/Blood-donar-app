@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloodLink - Web Application</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Firebase SDKs via CDN -->
+    <script type="module" src="js/firebase.js" defer></script>
+    <script type="module" src="js/app.js" defer></script>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header id="main-header" class="hidden">
+        <div class="logo-container">
+            <i class="ri-drop-fill logo-icon"></i>
+            <h1>BloodLink</h1>
+        </div>
+        <nav>
+            <button class="nav-btn active" data-target="dashboard-section"><i class="ri-dashboard-line"></i> Dashboard</button>
+            <button class="nav-btn" data-target="search-section"><i class="ri-search-line"></i> Search Donors</button>
+            <button class="nav-btn" data-target="request-section"><i class="ri-add-circle-line"></i> Request Blood</button>
+            <button id="logout-btn" class="nav-btn danger"><i class="ri-logout-box-r-line"></i> Logout</button>
+        </nav>
+    </header>
+
+    <main id="app-container">
+        
+        <!-- Authentication Section -->
+        <section id="auth-section" class="active-section glass-panel auth-panel">
+            <div class="auth-header">
+                <i class="ri-drop-fill large-drop"></i>
+                <h2>Welcome to BloodLink</h2>
+                <p>Save lives, give blood.</p>
+            </div>
+            <form id="login-form">
+                <div class="input-group">
+                    <i class="ri-mail-line"></i>
+                    <input type="email" id="email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <i class="ri-lock-password-line"></i>
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="primary-btn">Sign In</button>
+            </form>
+            <p id="auth-error" class="error-text hidden"></p>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="hidden glass-panel">
+            <h2>Welcome Back, <span id="user-display-name">User</span></h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="ri-heart-pulse-line"></i>
+                    <h3>Recent Requests</h3>
+                    <p id="recent-requests-count">Loading...</p>
+                </div>
+                <div class="stat-card">
+                    <i class="ri-user-heart-line"></i>
+                    <h3>Available Donors</h3>
+                    <p id="available-donors-count">Loading...</p>
+                </div>
+            </div>
+            <h3>Urgent Blood Requests</h3>
+            <div id="urgent-requests-list" class="list-container">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+
+        <!-- Search Section -->
+        <section id="search-section" class="hidden glass-panel">
+            <h2>Search Blood Donors</h2>
+            <div class="search-controls">
+                <select id="search-blood-group" class="styled-select">
+                    <option value="">Any Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+                <button id="search-btn" class="primary-btn"><i class="ri-search-line"></i> Search</button>
+            </div>
+            <div id="search-results" class="list-container mt-20">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+
+        <!-- Request Section -->
+        <section id="request-section" class="hidden glass-panel">
+            <h2>Create Emergency Request</h2>
+            <form id="blood-request-form">
+                <div class="input-group">
+                    <input type="text" id="patient-name" placeholder="Patient Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="hospital-name" placeholder="Hospital Name & Location" required>
+                </div>
+                <div class="input-group">
+                    <select id="request-blood-group" class="styled-select" required>
+                        <option value="" disabled selected>Select Blood Group Needed</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <select id="urgency-level" class="styled-select" required>
+                        <option value="Normal">Normal</option>
+                        <option value="Urgent">Urgent</option>
+                        <option value="Emergency">Emergency (Critical)</option>
+                    </select>
+                </div>
+                <button type="submit" class="primary-btn emergency-btn">Broadcast Request</button>
+            </form>
+            <p id="request-status" class="hidden"></p>
+        </section>
+
+    </main>
+</body>
+</html>
