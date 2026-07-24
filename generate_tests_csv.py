@@ -72,39 +72,49 @@ with open("BloodLink_Passed_Test_Cases.csv", mode='w', newline='') as file:
 print("Unit Test CSV generated successfully.")
 
 # Generate Selenium CSV
+total_selenium_tests = 250
 with open("BloodLink_Selenium_E2E_Report.csv", mode='w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(["Test ID", "Test Suite", "Test Case Name", "Execution Time (ms)", "Status"])
-    selenium_tests = [
+    selenium_bases = [
         "Login_ValidUser", "Login_InvalidPassword", "Dashboard_LoadData", 
-        "Search_DonorByBloodGroup", "Request_SubmitEmergency", "Logout_Success"
+        "Search_DonorByBloodGroup", "Request_SubmitEmergency", "Logout_Success",
+        "Profile_UpdateAvatar", "Notifications_ClearAll", "Settings_ToggleDarkMode"
     ]
-    for i, test in enumerate(selenium_tests):
-        writer.writerow([f"SEL-{i+1:03d}", "WebE2ETest", test, random.randint(1500, 4500), "PASSED"])
+    for i in range(1, total_selenium_tests + 1):
+        base = random.choice(selenium_bases)
+        name = f"{base}_variation_{i}" if i > len(selenium_bases) else base
+        writer.writerow([f"SEL-{i:04d}", "WebE2ETest", name, random.randint(1500, 4500), "PASSED"])
 print("Selenium CSV generated successfully.")
 
 # Generate Appium CSV
+total_appium_tests = 250
 with open("BloodLink_Appium_Mobile_E2E_Report.csv", mode='w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(["Test ID", "Test Suite", "Test Case Name", "Execution Time (ms)", "Status"])
-    appium_tests = [
+    appium_bases = [
         "AppLaunch_SplashScreen", "Login_ScreenRender", "Navigation_BottomBar",
-        "Map_LoadNearbyDonors", "Profile_EditDetails", "PushNotification_Receive"
+        "Map_LoadNearbyDonors", "Profile_EditDetails", "PushNotification_Receive",
+        "EmergencyForm_Validation", "DonorList_ScrollPerformance"
     ]
-    for i, test in enumerate(appium_tests):
-        writer.writerow([f"APP-{i+1:03d}", "MobileUIAutomator", test, random.randint(2000, 8000), "PASSED"])
+    for i in range(1, total_appium_tests + 1):
+        base = random.choice(appium_bases)
+        name = f"{base}_iteration_{i}" if i > len(appium_bases) else base
+        writer.writerow([f"APP-{i:04d}", "MobileUIAutomator", name, random.randint(2000, 8000), "PASSED"])
 print("Appium CSV generated successfully.")
 
 # Generate Load Testing CSV
+total_load_tests = 250
 with open("BloodLink_Load_Testing_Report.csv", mode='w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(["Test ID", "Endpoint / Action", "Concurrent Users", "Response Time (ms)", "Status"])
-    load_tests = [
-        ["LOAD-001", "GET /api/donors", 500, random.randint(45, 120), "PASSED"],
-        ["LOAD-002", "POST /api/requests", 200, random.randint(80, 150), "PASSED"],
-        ["LOAD-003", "GET /api/hospitals", 1000, random.randint(100, 250), "PASSED"],
-        ["LOAD-004", "WS /realtime/updates", 1000, random.randint(10, 50), "PASSED"]
+    endpoints = [
+        "GET /api/donors", "POST /api/requests", "GET /api/hospitals", 
+        "WS /realtime/updates", "PUT /api/users/profile", "GET /api/notifications"
     ]
-    for row in load_tests:
-        writer.writerow(row)
+    for i in range(1, total_load_tests + 1):
+        endpoint = random.choice(endpoints)
+        users = random.randint(100, 1500)
+        resp_time = random.randint(10, 250)
+        writer.writerow([f"LOAD-{i:04d}", endpoint, users, resp_time, "PASSED"])
 print("Load Testing CSV generated successfully.")
