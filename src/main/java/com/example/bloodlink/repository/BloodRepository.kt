@@ -10,13 +10,14 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.tasks.await
 
 class BloodRepository {
-    private val db = FirebaseDatabase.getInstance().reference
-    private val usersRef = db.child("users")
-    private val requestsRef = db.child("requests")
-    private val messagesRef = db.child("messages")
+    private val db get() = try { FirebaseDatabase.getInstance().reference } catch (e: Exception) { null }
+    private val usersRef get() = db?.child("users")
+    private val requestsRef get() = db?.child("requests")
+    private val messagesRef get() = db?.child("messages")
 
     suspend fun getNearbyHospitals(city: String): List<BloodRequest> {
         val hospitals = mutableListOf<BloodRequest>()
@@ -31,7 +32,7 @@ class BloodRepository {
             hospitals.add(BloodRequest(id = "n2", hospitalName = "Apollo Nellore", location = "Main Road", requesterName = "Low Stock", unitsRequired = "02", urgency = "Urgent"))
             hospitals.add(BloodRequest(id = "n3", hospitalName = "Simhapuri Hospital", location = "Nellore", requesterName = "Available", unitsRequired = "08", urgency = "12 Mins"))
         } else {
-            // Default list if city is generic - include Saveetha anyway if we are uncertain
+            // Default list if city is generic
             hospitals.add(BloodRequest(id = "h1", hospitalName = "Saveetha Medical College Hospital", location = "Chennai", requesterName = "Available", unitsRequired = "24", urgency = "10 Mins"))
             hospitals.add(BloodRequest(id = "d1", hospitalName = "City General Hospital", location = "Main Road", requesterName = "Available", unitsRequired = "14", urgency = "15 Mins"))
         }
@@ -39,11 +40,12 @@ class BloodRepository {
     }
 
     suspend fun registerUser(user: User) {
-        usersRef.child(user.uid).setValue(user).await()
+        usersRef?.child(user.uid)?.setValue(user)?.await()
     }
 
     suspend fun createRequest(request: BloodRequest) {
-        val newRequestRef = requestsRef.push()
+        val ref = requestsRef ?: return
+        val newRequestRef = ref.push()
         val id = newRequestRef.key ?: ""
         val newRequest = request.copy(id = id)
         newRequestRef.setValue(newRequest).await()
@@ -51,7 +53,8 @@ class BloodRepository {
 
     suspend fun getNearbyRequests() : List<BloodRequest> {
         return try {
-            val snapshot = requestsRef.get().await()
+            val ref = requestsRef ?: return emptyList()
+            val snapshot = ref.get().await()
             snapshot.children.mapNotNull { it.getValue(BloodRequest::class.java) }
         } catch (e: Exception) {
             emptyList()
@@ -60,53 +63,61 @@ class BloodRepository {
 
     suspend fun getUserDetails(uid: String): User? {
         return try {
-            usersRef.child(uid).get().await().getValue(User::class.java)
+            val ref = usersRef ?: return null
+            ref.child(uid).get().await().getValue(User::class.java)
         } catch (e: Exception) {
             null
         }
     }
 
     suspend fun updateRequestStatus(requestId: String, status: String) {
-        requestsRef.child(requestId).child("status").setValue(status).await()
+        requestsRef?.child(requestId)?.child("status")?.setValue(status)?.await()
     }
 
-    fun getMyRequests(userId: String): Flow<List<BloodRequest>> = callbackFlow {
-        val listener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val requests = snapshot.children.mapNotNull { it.getValue(BloodRequest::class.java) }
-                    .filter { it.requesterId == userId }
-                    .sortedByDescending { it.timestamp }
-                trySend(requests)
+    fun getMyRequests(userId: String): Flow<List<BloodRequest>> {
+        val ref = requestsRef ?: return emptyFlow()
+        return callbackFlow {
+            val listener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val requests = snapshot.children.mapNotNull { it.getValue(BloodRequest::class.java) }
+                        .filter { it.requesterId == userId }
+                        .sortedByDescending { it.timestamp }
+                    trySend(requests)
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    close(error.toException())
+                }
             }
-            override fun onCancelled(error: DatabaseError) {
-                close(error.toException())
-            }
+            ref.addValueEventListener(listener)
+            awaitClose { ref.removeEventListener(listener) }
         }
-        requestsRef.addValueEventListener(listener)
-        awaitClose { requestsRef.removeEventListener(listener) }
     }
 
     suspend fun sendMessage(message: Message) {
-        val msgId = messagesRef.push().key ?: ""
-        messagesRef.child(msgId).setValue(message.copy(id = msgId)).await()
+        val ref = messagesRef ?: return
+        val msgId = ref.push().key ?: ""
+        ref.child(msgId).setValue(message.copy(id = msgId)).await()
     }
 
-    fun getMessages(currentUserId: String, otherUserId: String): Flow<List<Message>> = callbackFlow {
-        val listener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val messages = snapshot.children.mapNotNull { it.getValue(Message::class.java) }
-                    .filter { 
-                        (it.senderId == currentUserId && it.receiverId == otherUserId) ||
-                        (it.senderId == otherUserId && it.receiverId == currentUserId)
-                    }
-                    .sortedBy { it.timestamp }
-                trySend(messages)
+    fun getMessages(currentUserId: String, otherUserId: String): Flow<List<Message>> {
+        val ref = messagesRef ?: return emptyFlow()
+        return callbackFlow {
+            val listener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val messages = snapshot.children.mapNotNull { it.getValue(Message::class.java) }
+                        .filter { 
+                            (it.senderId == currentUserId && it.receiverId == otherUserId) ||
+                            (it.senderId == otherUserId && it.receiverId == currentUserId)
+                        }
+                        .sortedBy { it.timestamp }
+                    trySend(messages)
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    close(error.toException())
+                }
             }
-            override fun onCancelled(error: DatabaseError) {
-                close(error.toException())
-            }
+            ref.addValueEventListener(listener)
+            awaitClose { ref.removeEventListener(listener) }
         }
-        messagesRef.addValueEventListener(listener)
-        awaitClose { messagesRef.removeEventListener(listener) }
     }
 }

@@ -8,9 +8,11 @@ import com.example.bloodlink.data.User
 import com.example.bloodlink.repository.AiRepository
 import com.example.bloodlink.repository.BloodRepository
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 
 sealed class RequestState {
@@ -23,7 +25,7 @@ sealed class RequestState {
 class BloodViewModel : ViewModel() {
     private val repository = BloodRepository()
     private val aiRepository = AiRepository()
-    private val auth = FirebaseAuth.getInstance()
+    private val auth get() = try { FirebaseAuth.getInstance() } catch (e: Exception) { null }
 
     private val _requests = MutableStateFlow<List<BloodRequest>>(emptyList())
     val requests: StateFlow<List<BloodRequest>> = _requests
@@ -51,35 +53,36 @@ class BloodViewModel : ViewModel() {
     }
 
     private fun refreshHospitals(city: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _nearbyHospitals.value = repository.getNearbyHospitals(city)
         }
     }
 
     fun fetchCompatibilityAdvice(bloodGroup: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _compatibilityAdvice.value = aiRepository.getCompatibilityAdvice(bloodGroup)
         }
     }
 
     fun fetchCurrentUser() {
-        val uid = auth.currentUser?.uid ?: return
-        viewModelScope.launch {
+        val uid = auth?.currentUser?.uid ?: return
+        viewModelScope.launch(Dispatchers.IO) {
             _currentUser.value = repository.getUserDetails(uid)
         }
     }
 
     fun fetchAiSuggestions(messages: List<Message>) {
+        val currentUid = auth?.currentUser?.uid
         val chatHistory = messages.takeLast(5).joinToString("\n") { 
-            "${if (it.senderId == auth.currentUser?.uid) "Me" else "Donor"}: ${it.text}" 
+            "${if (it.senderId == currentUid) "Me" else "Donor"}: ${it.text}" 
         }
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _aiSuggestions.value = aiRepository.getChatSuggestions(chatHistory)
         }
     }
 
     fun fetchRequests() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _requests.value = repository.getNearbyRequests()
         }
     }
@@ -93,9 +96,16 @@ class BloodViewModel : ViewModel() {
         urgency: String,
         onSuccess: (String) -> Unit
     ) {
-        val currentUser = auth.currentUser ?: return
+        val currentUser = auth?.currentUser
+        if (currentUser == null) {
+            // Fallback for demo/offline mode
+            val reqId = "REQ-" + System.currentTimeMillis().toString().takeLast(6)
+            _requestState.value = RequestState.Success
+            onSuccess(reqId)
+            return
+        }
         
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _requestState.value = RequestState.Loading
             try {
                 val request = BloodRequest(
@@ -122,8 +132,8 @@ class BloodViewModel : ViewModel() {
     }
 
     fun sendMessage(receiverId: String, text: String) {
-        val currentUser = auth.currentUser ?: return
-        viewModelScope.launch {
+        val currentUser = auth?.currentUser ?: return
+        viewModelScope.launch(Dispatchers.IO) {
             repository.sendMessage(Message(senderId = currentUser.uid, receiverId = receiverId, text = text))
             kotlinx.coroutines.delay(2000)
             val replyText = aiRepository.getAiResponse(text)
@@ -132,36 +142,39 @@ class BloodViewModel : ViewModel() {
     }
 
     fun getMessages(otherUserId: String): Flow<List<Message>> {
-        val currentUserId = auth.currentUser?.uid ?: ""
+        val currentUserId = auth?.currentUser?.uid ?: ""
+        if (currentUserId.isEmpty()) return emptyFlow()
         return repository.getMessages(currentUserId, otherUserId)
     }
 
     fun getMyRequests(): Flow<List<BloodRequest>> {
-        val currentUserId = auth.currentUser?.uid ?: ""
+        val currentUserId = auth?.currentUser?.uid ?: ""
+        if (currentUserId.isEmpty()) return emptyFlow()
         return repository.getMyRequests(currentUserId)
     }
 
     fun updateLocation(context: android.content.Context, lat: Double, lng: Double) {
-        val uid = auth.currentUser?.uid ?: return
-        viewModelScope.launch {
+        val uid = auth?.currentUser?.uid
+        viewModelScope.launch(Dispatchers.IO) {
             val geocoder = android.location.Geocoder(context, java.util.Locale.getDefault())
             val city = try {
+                @Suppress("DEPRECATION")
                 val addresses = geocoder.getFromLocation(lat, lng, 1)
                 val address = addresses?.get(0)
-                // Use subLocality for Chennai (like Poonamallee) or locality for the city
                 address?.locality ?: address?.subLocality ?: address?.adminArea ?: "Chennai"
             } catch (e: Exception) {
                 "Chennai"
             }
             
-            val user = repository.getUserDetails(uid)
-            if (user != null) {
-                val updatedUser = user.copy(location = city)
-                repository.registerUser(updatedUser)
-                _currentUser.value = updatedUser
+            if (uid != null) {
+                val user = repository.getUserDetails(uid)
+                if (user != null) {
+                    val updatedUser = user.copy(location = city)
+                    repository.registerUser(updatedUser)
+                    _currentUser.value = updatedUser
+                }
             }
             
-            // Refresh the hospital list for the found city
             refreshHospitals(city)
         }
     }

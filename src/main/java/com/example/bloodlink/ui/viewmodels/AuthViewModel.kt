@@ -6,6 +6,7 @@ import com.example.bloodlink.data.User
 import com.example.bloodlink.repository.BloodRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,17 +21,18 @@ sealed class AuthState {
 }
 
 class AuthViewModel : ViewModel() {
-    private val auth = FirebaseAuth.getInstance()
+    private val auth get() = try { FirebaseAuth.getInstance() } catch (e: Exception) { null }
     private val repository = BloodRepository()
 
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState: StateFlow<AuthState> = _authState
 
     fun login(email: String, password: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _authState.value = AuthState.Loading
             try {
-                val result = auth.signInWithEmailAndPassword(email, password).await()
+                val firebaseAuth = auth ?: throw Exception("Authentication service unavailable")
+                val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
                 val user = repository.getUserDetails(result.user?.uid ?: "")
                 if (user?.phone?.isEmpty() == true) {
                     _authState.value = AuthState.NeedsProfileCompletion
@@ -44,10 +46,11 @@ class AuthViewModel : ViewModel() {
     }
 
     fun signup(user: User, password: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _authState.value = AuthState.Loading
             try {
-                val result = auth.createUserWithEmailAndPassword(user.email, password).await()
+                val firebaseAuth = auth ?: throw Exception("Authentication service unavailable")
+                val result = firebaseAuth.createUserWithEmailAndPassword(user.email, password).await()
                 val uid = result.user?.uid ?: throw Exception("Signup Failed")
                 val newUser = user.copy(uid = uid)
                 repository.registerUser(newUser)
@@ -59,11 +62,12 @@ class AuthViewModel : ViewModel() {
     }
 
     fun signInWithGoogle(idToken: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _authState.value = AuthState.Loading
             try {
+                val firebaseAuth = auth ?: throw Exception("Authentication service unavailable")
                 val credential = GoogleAuthProvider.getCredential(idToken, null)
-                val result = auth.signInWithCredential(credential).await()
+                val result = firebaseAuth.signInWithCredential(credential).await()
                 val firebaseUser = result.user
                 if (firebaseUser != null) {
                     val existingUser = repository.getUserDetails(firebaseUser.uid)
@@ -90,8 +94,8 @@ class AuthViewModel : ViewModel() {
     }
 
     fun completeProfile(phone: String, bloodGroup: String) {
-        val uid = auth.currentUser?.uid ?: return
-        viewModelScope.launch {
+        val uid = auth?.currentUser?.uid ?: return
+        viewModelScope.launch(Dispatchers.IO) {
             _authState.value = AuthState.Loading
             try {
                 val existingUser = repository.getUserDetails(uid)
