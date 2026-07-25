@@ -51,6 +51,7 @@ function switchSection(targetId) {
         }
     });
 }
+window.switchSection = switchSection; // Export globally for HTML onclick handlers
 
 navBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -144,96 +145,29 @@ logoutBtn.addEventListener('click', () => {
 
 // Load Dashboard Data (Realtime)
 function loadDashboardData() {
-    // Load Requests
+    // Basic Stats
+    document.getElementById('stat-donors').textContent = mockDonors.length + 152;
+    document.getElementById('stat-hospitals').textContent = mockHospitals.length + 28;
+    document.getElementById('stat-patients').textContent = mockPatients.length + 84;
+    document.getElementById('stat-emergencies').textContent = mockPatients.filter(p => p.urgency === 'Emergency').length;
+
+    // Blood Group Availability Grid
+    const bloodGrid = document.getElementById('dashboard-blood-grid');
+    if (bloodGrid) {
+        const groups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
+        bloodGrid.innerHTML = groups.map(g => `
+            <div class="blood-card">
+                <h3>${g}</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted)">${Math.floor(Math.random() * 50) + 5} Units</p>
+            </div>
+        `).join('');
+    }
+
+    // Recent Activities (Mix of real and mock)
     const requestsRef = ref(db, 'bloodRequests');
     onValue(requestsRef, (snapshot) => {
+        if (!urgentRequestsList) return;
         urgentRequestsList.innerHTML = '';
-        let count = 0;
-        
-        if (snapshot.exists()) {
-            snapshot.forEach((childSnapshot) => {
-                const request = childSnapshot.val();
-                count++;
-                
-                if(request.urgency === 'Urgent' || request.urgency === 'Emergency') {
-                    const item = document.createElement('div');
-                    item.className = 'list-item';
-                    item.innerHTML = `
-                        <div>
-                            <h4>${request.patientName} <span class="badge" style="background: var(--warning)">${request.bloodGroup}</span></h4>
-                            <p><i class="ri-hospital-line"></i> ${request.hospital}</p>
-                            <p style="color: var(--primary-color)"><i class="ri-alarm-warning-line"></i> ${request.urgency}</p>
-                        </div>
-                    `;
-                    urgentRequestsList.appendChild(item);
-                }
-            });
-        } else {
-            urgentRequestsList.innerHTML = '<p style="color: var(--text-muted)">No urgent requests found.</p>';
-        }
-        recentRequestsCount.textContent = count;
-    });
-
-    // Load Donors
-    const usersRef = ref(db, 'users');
-    onValue(usersRef, (snapshot) => {
-        if (snapshot.exists()) {
-            availableDonorsCount.textContent = snapshot.size;
-        } else {
-            availableDonorsCount.textContent = "0";
-        }
-    });
-}
-
-// Load Nearby Data (Donors, Patients, Hospitals)
-function loadNearbyData() {
-    // Nearby Donors
-    const usersRef = ref(db, 'users');
-    onValue(usersRef, (snapshot) => {
-        nearbyDonorsList.innerHTML = '';
-        if (snapshot.exists()) {
-            snapshot.forEach((childSnapshot) => {
-                const user = childSnapshot.val();
-                const item = document.createElement('div');
-                item.className = 'list-item';
-                item.innerHTML = `
-                    <div>
-                        <h4>${user.name || 'Anonymous Donor'} <span class="badge">${user.bloodGroup}</span></h4>
-                        <p><i class="ri-phone-line"></i> ${user.contact || 'Not provided'}</p>
-                        <p><i class="ri-map-pin-line"></i> ${user.location || 'Location shared'}</p>
-                    </div>
-                    <button class="primary-btn" style="width: auto; padding: 0.5rem 1rem;">Contact</button>
-                `;
-                nearbyDonorsList.appendChild(item);
-            });
-        } else {
-            nearbyDonorsList.innerHTML = '<p style="color: var(--text-muted)">No donors found nearby.</p>';
-        }
-    });
-
-    // Nearby Patients
-    const requestsRef = ref(db, 'bloodRequests');
-    onValue(requestsRef, (snapshot) => {
-        nearbyPatientsList.innerHTML = '';
-        if (snapshot.exists()) {
-            snapshot.forEach((childSnapshot) => {
-                const req = childSnapshot.val();
-                const item = document.createElement('div');
-                item.className = 'list-item';
-                item.innerHTML = `
-                    <div>
-                        <h4>${req.patientName} <span class="badge" style="background: var(--primary-color)">${req.bloodGroup} Needed</span></h4>
-                        <p><i class="ri-hospital-line"></i> ${req.hospital}</p>
-                        <p style="color: var(--primary-color)"><i class="ri-alarm-warning-line"></i> ${req.urgency}</p>
-                    </div>
-                    <button class="primary-btn emergency-btn" style="width: auto; padding: 0.5rem 1rem;">Donate</button>
-                `;
-                nearbyPatientsList.appendChild(item);
-            });
-        } else {
-            nearbyPatientsList.innerHTML = '<p style="color: var(--text-muted)">No active patient requests nearby.</p>';
-        }
-    });
         let items = '';
         if (snapshot.exists()) {
             snapshot.forEach((child) => {
@@ -257,7 +191,7 @@ function loadNearbyData() {
                     <h4>${p.name} <span class="badge badge-${p.urgency.toLowerCase()}">${p.urgency}</span></h4>
                     <p>Needs ${p.groupRequired} at ${p.hospital}</p>
                 </div>
-                <button class="btn btn-outline" style="width:auto; padding: 0.5rem 1rem">View</button>
+                <button class="btn btn-outline" style="width:auto; padding: 0.5rem 1rem" onclick="switchSection('nearby-patients-section')">View</button>
             </div>
         `).join('');
         
