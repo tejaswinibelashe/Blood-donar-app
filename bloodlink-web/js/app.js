@@ -227,8 +227,10 @@ function loadDashboardData() {
 }
 
 function renderDonors(filterName = '', filterGroup = '') {
+    if (!nearbyDonorsList) return;
     nearbyDonorsList.innerHTML = '';
-    const filtered = mockDonors.filter(d => {
+    const allDonors = [...(window.currentDynamicDonors || []), ...mockDonors];
+    const filtered = allDonors.filter(d => {
         const matchName = d.name.toLowerCase().includes(filterName.toLowerCase()) || d.location.toLowerCase().includes(filterName.toLowerCase());
         const matchGroup = filterGroup === '' || d.bloodGroup === filterGroup;
         return matchName && matchGroup;
@@ -327,7 +329,24 @@ document.getElementById('patient-filter-urgency')?.addEventListener('change', (e
 document.getElementById('hospital-search')?.addEventListener('input', (e) => renderHospitals(e.target.value));
 
 function loadNearbyData() {
-    renderDonors();
+    const usersRef = ref(db, 'users');
+    onValue(usersRef, (snapshot) => {
+        let dynamicDonors = [];
+        if (snapshot.exists()) {
+            snapshot.forEach((child) => {
+                dynamicDonors.push(child.val());
+            });
+        }
+        window.currentDynamicDonors = dynamicDonors;
+        renderDonors(document.getElementById('donor-search')?.value || '', document.getElementById('donor-filter-group')?.value || '');
+        
+        // Also update the total donor count on the dashboard
+        const donorStat = document.getElementById('stat-donors');
+        if (donorStat) {
+            donorStat.textContent = mockDonors.length + dynamicDonors.length + 152;
+        }
+    });
+
     renderPatients();
     renderHospitals();
 }
