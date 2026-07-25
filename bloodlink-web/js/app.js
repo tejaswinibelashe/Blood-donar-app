@@ -147,6 +147,29 @@ logoutBtn.addEventListener('click', () => {
     signOut(auth);
 });
 
+// Mock Data
+const mockDonors = [
+    { name: 'John Doe', bloodGroup: 'O+', location: 'Downtown Medical Center', distance: '1.2 km', age: 28, gender: 'Male', status: 'Available', lastDonation: '3 months ago' },
+    { name: 'Jane Smith', bloodGroup: 'A-', location: 'Westside Clinic', distance: '3.5 km', age: 34, gender: 'Female', status: 'Available', lastDonation: '6 months ago' },
+    { name: 'Mike Johnson', bloodGroup: 'B+', location: 'North Hospital', distance: '5.0 km', age: 41, gender: 'Male', status: 'Unavailable (Recently Donated)', lastDonation: '2 weeks ago' },
+    { name: 'Emily Davis', bloodGroup: 'AB+', location: 'City Center', distance: '0.8 km', age: 25, gender: 'Female', status: 'Available', lastDonation: '1 year ago' },
+    { name: 'Robert Wilson', bloodGroup: 'O-', location: 'South Medical', distance: '4.2 km', age: 45, gender: 'Male', status: 'Available', lastDonation: '4 months ago' }
+];
+
+const mockPatients = [
+    { name: 'Sarah Connor', hospital: 'Downtown Medical Center', groupRequired: 'O-', urgency: 'Emergency', time: '10 mins ago', distance: '1.2 km' },
+    { name: 'James Gordon', hospital: 'General Hospital', groupRequired: 'A+', urgency: 'Urgent', time: '1 hour ago', distance: '2.5 km' },
+    { name: 'Bruce Wayne', hospital: 'Gotham Memorial', groupRequired: 'AB-', urgency: 'Normal', time: '3 hours ago', distance: '5.8 km' },
+    { name: 'Clark Kent', hospital: 'Metropolis General', groupRequired: 'O+', urgency: 'Emergency', time: '5 mins ago', distance: '0.5 km' }
+];
+
+const mockHospitals = [
+    { name: 'Downtown Medical Center', type: 'Level 1 Trauma Center', inventoryStatus: 'Critical - O Negative Shortage', location: '123 Main St, Downtown', phone: '(555) 123-4567' },
+    { name: 'General Hospital', type: 'General Medical', inventoryStatus: 'Stable', location: '456 Oak Ave, Westside', phone: '(555) 987-6543' },
+    { name: 'City Center Blood Bank', type: 'Dedicated Blood Bank', inventoryStatus: 'Good - All Types Available', location: '789 Pine Blvd, Central', phone: '(555) 555-0000' }
+];
+
+
 // Load Dashboard Data (Realtime)
 function loadDashboardData() {
     // Basic Stats
