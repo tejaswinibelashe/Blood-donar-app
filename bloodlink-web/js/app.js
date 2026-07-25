@@ -172,10 +172,10 @@ const mockHospitals = [
 
 // Load Dashboard Data (Realtime)
 function loadDashboardData() {
-    // Basic Stats
-    document.getElementById('stat-donors').textContent = mockDonors.length + 152;
-    document.getElementById('stat-hospitals').textContent = mockHospitals.length + 28;
-    document.getElementById('stat-patients').textContent = mockPatients.length + 84;
+    // Initialize stats to 0 or mock baseline (without padding)
+    document.getElementById('stat-donors').textContent = mockDonors.length;
+    document.getElementById('stat-hospitals').textContent = mockHospitals.length;
+    document.getElementById('stat-patients').textContent = mockPatients.length;
     document.getElementById('stat-emergencies').textContent = mockPatients.filter(p => p.urgency === 'Emergency').length;
 
     // Blood Group Availability Grid
@@ -196,9 +196,17 @@ function loadDashboardData() {
         if (!urgentRequestsList) return;
         urgentRequestsList.innerHTML = '';
         let items = '';
+        let realPatientsCount = 0;
+        let realEmergenciesCount = 0;
+
         if (snapshot.exists()) {
             snapshot.forEach((child) => {
                 const req = child.val();
+                realPatientsCount++;
+                if (req.urgency === 'Emergency' || req.urgency === 'Urgent') {
+                    realEmergenciesCount++;
+                }
+
                 items += `
                     <div class="list-item" style="border-left-color: #E63946;">
                         <div>
@@ -211,6 +219,10 @@ function loadDashboardData() {
             });
         }
         
+        // Update stats with real + mock data
+        document.getElementById('stat-patients').textContent = mockPatients.length + realPatientsCount;
+        document.getElementById('stat-emergencies').textContent = mockPatients.filter(p => p.urgency === 'Emergency').length + realEmergenciesCount;
+
         // Append mock recent activities
         items += mockPatients.slice(0, 3).map(p => `
             <div class="list-item" style="border-left-color: ${p.urgency === 'Emergency' ? '#E63946' : '#E9C46A'};">
@@ -342,7 +354,7 @@ function loadNearbyData() {
         // Also update the total donor count on the dashboard
         const donorStat = document.getElementById('stat-donors');
         if (donorStat) {
-            donorStat.textContent = mockDonors.length + dynamicDonors.length + 152;
+            donorStat.textContent = mockDonors.length + dynamicDonors.length;
         }
     });
 
