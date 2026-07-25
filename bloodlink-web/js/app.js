@@ -349,37 +349,54 @@ searchBtn.addEventListener('click', () => {
 // Handle Emergency Request Submission
 bloodRequestForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const patientName = document.getElementById('patient-name').value;
-    const hospital = document.getElementById('hospital-name').value;
-    const bloodGroup = document.getElementById('request-blood-group').value;
-    const urgency = document.getElementById('urgency-level').value;
-    const requesterId = auth.currentUser ? auth.currentUser.uid : "unknown";
+    const submitBtn = bloodRequestForm.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Broadcasting...';
+    submitBtn.disabled = true;
 
-    const requestsRef = ref(db, 'bloodRequests');
-    const newRequestRef = push(requestsRef);
-    
-    set(newRequestRef, {
-        patientName,
-        hospital,
-        bloodGroup,
-        urgency,
-        requesterId,
-        timestamp: Date.now()
-    }).then(() => {
-        bloodRequestForm.reset();
-        requestStatus.textContent = "Emergency request broadcasted successfully!";
-        requestStatus.style.color = "var(--success)";
-        requestStatus.classList.remove('hidden');
+    try {
+        const patientName = document.getElementById('patient-name').value;
+        const hospital = document.getElementById('hospital-name').value;
+        const bloodGroup = document.getElementById('request-blood-group').value;
+        const urgency = document.getElementById('urgency-level').value;
+        const requesterId = auth.currentUser ? auth.currentUser.uid : "unknown";
+
+        const requestsRef = ref(db, 'bloodRequests');
+        const newRequestRef = push(requestsRef);
         
-        setTimeout(() => {
-            requestStatus.classList.add('hidden');
-            switchSection('dashboard-section');
-        }, 3000);
-    }).catch(error => {
-        requestStatus.textContent = error.message;
+        set(newRequestRef, {
+            patientName,
+            hospital,
+            bloodGroup,
+            urgency,
+            requesterId,
+            timestamp: Date.now()
+        }).then(() => {
+            bloodRequestForm.reset();
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+            requestStatus.textContent = "Emergency request broadcasted successfully!";
+            requestStatus.style.color = "var(--success)";
+            requestStatus.classList.remove('hidden');
+            
+            setTimeout(() => {
+                requestStatus.classList.add('hidden');
+                switchSection('dashboard-section');
+            }, 3000);
+        }).catch(error => {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+            requestStatus.textContent = "Firebase Error: " + error.message;
+            requestStatus.style.color = "var(--primary-color)";
+            requestStatus.classList.remove('hidden');
+        });
+    } catch(err) {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+        requestStatus.textContent = "JS Error: " + err.message;
         requestStatus.style.color = "var(--primary-color)";
         requestStatus.classList.remove('hidden');
-    });
+    }
 });
 
 // Handle Donor Registration Form Submission
