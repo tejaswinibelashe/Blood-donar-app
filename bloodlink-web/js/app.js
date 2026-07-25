@@ -205,7 +205,7 @@ function loadDashboardData() {
                             <h4>${req.patientName || 'Emergency'} <span class="badge badge-emergency">Real-time</span></h4>
                             <p>Needs ${req.bloodGroup} at ${req.hospital}</p>
                         </div>
-                        <button class="btn btn-fill" style="width:auto; padding: 0.5rem 1rem">Respond</button>
+                        <button class="btn btn-fill" style="width:auto; padding: 0.5rem 1rem" onclick="this.textContent='Responded'; this.disabled=true; this.style.opacity='0.5'; alert('Thank you! The patient has been notified of your response.')">Respond</button>
                     </div>
                 `;
             });
@@ -259,7 +259,7 @@ function renderDonors(filterName = '', filterGroup = '') {
                 </div>
                 <div class="profile-actions">
                     <button class="btn btn-outline"><i class="ri-user-line"></i> Profile</button>
-                    <button class="btn btn-fill" ${d.status !== 'Available' ? 'disabled style="opacity:0.5"' : ''}><i class="ri-phone-line"></i> Contact</button>
+                    <button class="btn btn-fill" ${d.status !== 'Available' ? 'disabled style="opacity:0.5"' : ''} onclick="alert('Calling ${d.name} at ${d.contact || d.phone || '(555) 123-4567'}...')"><i class="ri-phone-line"></i> Contact</button>
                 </div>
             </div>
         `;
@@ -304,15 +304,14 @@ function renderHospitals(filterName = '') {
 
     filtered.forEach(h => {
         hospitalsList.innerHTML += `
-            <div class="hospital-card">
-                <img src="${h.img}" class="hospital-img" alt="${h.name}">
-                <div class="hospital-content">
-                    <h3 style="margin-bottom: 5px;">${h.name}</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;"><i class="ri-map-pin-line"></i> ${h.location}</p>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 15px;">
-                        <span>Blood Bank: <strong style="color:${h.bloodBankStatus === 'Adequate' ? 'var(--success)' : h.bloodBankStatus === 'Critical' ? 'var(--primary-color)' : 'var(--warning)'}">${h.bloodBankStatus}</strong></span>
-                    </div>
-                    <button class="btn btn-outline" style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid #555; background: transparent; color: white;"><i class="ri-phone-line"></i> ${h.phone}</button>
+            <div class="list-item">
+                <div>
+                    <h4>${h.name} <span class="badge badge-normal">${h.inventoryStatus}</span></h4>
+                    <p><i class="ri-map-pin-line"></i> ${h.location}</p>
+                    <p><i class="ri-hospital-line"></i> ${h.type}</p>
+                </div>
+                <div style="text-align: right;">
+                    <button class="btn btn-outline" style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid #555; background: transparent; color: white;" onclick="alert('Calling ${h.name} at ${h.phone}...')"><i class="ri-phone-line"></i> ${h.phone}</button>
                 </div>
             </div>
         `;
