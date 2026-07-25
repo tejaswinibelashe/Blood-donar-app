@@ -37,20 +37,11 @@ const hospitalsList = document.getElementById('hospitals-list');
 
 const navBtns = document.querySelectorAll('.nav-btn:not(.danger)');
 
-// Sections mapping
-const sections = {
-    'dashboard-section': dashboardSection,
-    'search-section': searchSection,
-    'request-section': requestSection,
-    'nearby-donors-section': nearbyDonorsSection,
-    'nearby-patients-section': nearbyPatientsSection,
-    'hospitals-section': hospitalsSection
-};
-
 // Navigation Logic
 function switchSection(targetId) {
-    Object.values(sections).forEach(sec => sec.classList.add('hidden'));
-    sections[targetId].classList.remove('hidden');
+    document.querySelectorAll('main > section.glass-panel').forEach(sec => sec.classList.add('hidden'));
+    const targetSec = document.getElementById(targetId);
+    if (targetSec) targetSec.classList.remove('hidden');
 
     navBtns.forEach(btn => {
         if(btn.dataset.target === targetId) {
@@ -87,7 +78,7 @@ onAuthStateChanged(auth, (user) => {
         // User is signed out
         authSection.classList.remove('hidden');
         header.classList.add('hidden');
-        Object.values(sections).forEach(sec => sec.classList.add('hidden'));
+        document.querySelectorAll('main > section.glass-panel').forEach(sec => sec.classList.add('hidden'));
     }
 });
 
