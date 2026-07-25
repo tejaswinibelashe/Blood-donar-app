@@ -234,29 +234,141 @@ function loadNearbyData() {
             nearbyPatientsList.innerHTML = '<p style="color: var(--text-muted)">No active patient requests nearby.</p>';
         }
     });
-
-    // Partnered Hospitals (Static list matching Android App)
-    const hospitals = [
-        { name: "Saveetha Medical College Hospital", loc: "Poonamallee, Chennai", status: "Available" },
-        { name: "Apollo Speciality Hospital", loc: "Chennai", status: "Low Stock" },
-        { name: "Medicover Hospital", loc: "Nellore", status: "Available" },
-        { name: "City General Hospital", loc: "Main Road", status: "Available" }
-    ];
-    
-    hospitalsList.innerHTML = '';
-    hospitals.forEach(h => {
-        const item = document.createElement('div');
-        item.className = 'list-item';
-        item.innerHTML = `
-            <div>
-                <h4>${h.name}</h4>
-                <p><i class="ri-map-pin-line"></i> ${h.loc}</p>
-                <p><i class="ri-drop-fill"></i> Blood Bank: <span style="color: ${h.status === 'Available' ? 'var(--success)' : 'var(--warning)'}">${h.status}</span></p>
+        let items = '';
+        if (snapshot.exists()) {
+            snapshot.forEach((child) => {
+                const req = child.val();
+                items += `
+                    <div class="list-item" style="border-left-color: #E63946;">
+                        <div>
+                            <h4>${req.patientName || 'Emergency'} <span class="badge badge-emergency">Real-time</span></h4>
+                            <p>Needs ${req.bloodGroup} at ${req.hospital}</p>
+                        </div>
+                        <button class="btn btn-fill" style="width:auto; padding: 0.5rem 1rem">Respond</button>
+                    </div>
+                `;
+            });
+        }
+        
+        // Append mock recent activities
+        items += mockPatients.slice(0, 3).map(p => `
+            <div class="list-item" style="border-left-color: ${p.urgency === 'Emergency' ? '#E63946' : '#E9C46A'};">
+                <div>
+                    <h4>${p.name} <span class="badge badge-${p.urgency.toLowerCase()}">${p.urgency}</span></h4>
+                    <p>Needs ${p.groupRequired} at ${p.hospital}</p>
+                </div>
+                <button class="btn btn-outline" style="width:auto; padding: 0.5rem 1rem">View</button>
             </div>
-            <button class="primary-btn" style="width: auto; padding: 0.5rem 1rem; background: var(--success)">Directions</button>
-        `;
-        hospitalsList.appendChild(item);
+        `).join('');
+        
+        urgentRequestsList.innerHTML = items || '<p>No recent activities.</p>';
+    }, { onlyOnce: true });
+}
+
+function renderDonors(filterName = '', filterGroup = '') {
+    nearbyDonorsList.innerHTML = '';
+    const filtered = mockDonors.filter(d => {
+        const matchName = d.name.toLowerCase().includes(filterName.toLowerCase()) || d.location.toLowerCase().includes(filterName.toLowerCase());
+        const matchGroup = filterGroup === '' || d.bloodGroup === filterGroup;
+        return matchName && matchGroup;
     });
+
+    if (filtered.length === 0) {
+        nearbyDonorsList.innerHTML = '<p>No donors found matching criteria.</p>';
+        return;
+    }
+
+    filtered.forEach(d => {
+        nearbyDonorsList.innerHTML += `
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="avatar">${d.name.charAt(0)}</div>
+                    <div class="profile-info">
+                        <h3>${d.name} <span class="badge badge-normal">${d.bloodGroup}</span></h3>
+                        <p><i class="ri-map-pin-line"></i> ${d.location} (${d.distance})</p>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div><span style="color:var(--text-muted)">Age:</span> ${d.age}</div>
+                    <div><span style="color:var(--text-muted)">Gender:</span> ${d.gender}</div>
+                    <div><span style="color:var(--text-muted)">Status:</span> <span style="color:${d.status === 'Available' ? 'var(--success)' : 'var(--text-muted)'}">${d.status}</span></div>
+                    <div><span style="color:var(--text-muted)">Last Donated:</span> ${d.lastDonation}</div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn btn-outline"><i class="ri-user-line"></i> Profile</button>
+                    <button class="btn btn-fill" ${d.status !== 'Available' ? 'disabled style="opacity:0.5"' : ''}><i class="ri-phone-line"></i> Contact</button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function renderPatients(filterName = '', filterUrgency = '') {
+    nearbyPatientsList.innerHTML = '';
+    const filtered = mockPatients.filter(p => {
+        const matchName = p.name.toLowerCase().includes(filterName.toLowerCase()) || p.hospital.toLowerCase().includes(filterName.toLowerCase());
+        const matchUrgency = filterUrgency === '' || p.urgency === filterUrgency;
+        return matchName && matchUrgency;
+    });
+
+    filtered.forEach(p => {
+        const badgeClass = p.urgency === 'Emergency' ? 'badge-emergency' : p.urgency === 'Urgent' ? 'badge-urgent' : 'badge-normal';
+        nearbyPatientsList.innerHTML += `
+            <div class="patient-card ${p.urgency.toLowerCase()}">
+                <div style="flex: 1; min-width: 250px;">
+                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
+                        <h3 style="margin:0">${p.name}</h3>
+                        <span class="badge ${badgeClass}">${p.urgency}</span>
+                        <span class="badge" style="background:#333">${p.groupRequired}</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size:0.9rem;">
+                        <i class="ri-hospital-line"></i> ${p.hospital} (${p.distance})
+                    </p>
+                    <p style="font-size:0.9rem; margin-top:5px;">Required: <strong>${p.units} Units</strong> | Status: ${p.status}</p>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-outline" style="padding: 0.5rem 1rem; border-radius:6px; border:1px solid #555; background:transparent; color:white;"><i class="ri-share-line"></i> Share</button>
+                    <button class="btn btn-fill" style="padding: 0.5rem 1rem; border-radius:6px; border:none; background:var(--primary-color); color:white;"><i class="ri-hand-heart-line"></i> Donate</button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function renderHospitals(filterName = '') {
+    hospitalsList.innerHTML = '';
+    const filtered = mockHospitals.filter(h => h.name.toLowerCase().includes(filterName.toLowerCase()) || h.location.toLowerCase().includes(filterName.toLowerCase()));
+
+    filtered.forEach(h => {
+        hospitalsList.innerHTML += `
+            <div class="hospital-card">
+                <img src="${h.img}" class="hospital-img" alt="${h.name}">
+                <div class="hospital-content">
+                    <h3 style="margin-bottom: 5px;">${h.name}</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;"><i class="ri-map-pin-line"></i> ${h.location}</p>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 15px;">
+                        <span>Blood Bank: <strong style="color:${h.bloodBankStatus === 'Adequate' ? 'var(--success)' : h.bloodBankStatus === 'Critical' ? 'var(--primary-color)' : 'var(--warning)'}">${h.bloodBankStatus}</strong></span>
+                    </div>
+                    <button class="btn btn-outline" style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid #555; background: transparent; color: white;"><i class="ri-phone-line"></i> ${h.phone}</button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+// Search Listeners
+document.getElementById('donor-search')?.addEventListener('input', (e) => renderDonors(e.target.value, document.getElementById('donor-filter-group').value));
+document.getElementById('donor-filter-group')?.addEventListener('change', (e) => renderDonors(document.getElementById('donor-search').value, e.target.value));
+
+document.getElementById('patient-search')?.addEventListener('input', (e) => renderPatients(e.target.value, document.getElementById('patient-filter-urgency').value));
+document.getElementById('patient-filter-urgency')?.addEventListener('change', (e) => renderPatients(document.getElementById('patient-search').value, e.target.value));
+
+document.getElementById('hospital-search')?.addEventListener('input', (e) => renderHospitals(e.target.value));
+
+function loadNearbyData() {
+    renderDonors();
+    renderPatients();
+    renderHospitals();
 }
 
 // Handle Blood Search
