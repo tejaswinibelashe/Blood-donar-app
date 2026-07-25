@@ -77,9 +77,13 @@ onAuthStateChanged(auth, (user) => {
         loadNearbyData();
     } else {
         // User is signed out
-        authSection.classList.remove('hidden');
         header.classList.add('hidden');
-        document.querySelectorAll('main > section.glass-panel').forEach(sec => sec.classList.add('hidden'));
+        document.querySelectorAll('main > section.glass-panel').forEach(sec => {
+            if (sec.id !== 'auth-section') {
+                sec.classList.add('hidden');
+            }
+        });
+        authSection.classList.remove('hidden');
     }
 });
 
