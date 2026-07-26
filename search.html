@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloodLink - Search Donors</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+    <div class="wrapper">
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-droplet logo-icon"></i>
+                <h3>BloodLink</h3>
+            </div>
+            
+            <ul class="sidebar-nav">
+                <li><a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a href="donors.html"><i class="fa-solid fa-users"></i> Nearby Donors</a></li>
+                <li><a href="patients.html"><i class="fa-solid fa-bed-pulse"></i> Nearby Patients</a></li>
+                <li><a href="hospitals.html"><i class="fa-solid fa-hospital"></i> Hospitals</a></li>
+                <li><a href="search.html" class="active"><i class="fa-solid fa-magnifying-glass"></i> Search Donors</a></li>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+                <li><a href="become-donor.html"><i class="fa-solid fa-hand-holding-heart"></i> Become a Donor</a></li>
+                <li><a href="request-blood.html"><i class="fa-solid fa-kit-medical"></i> Request Blood</a></li>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+                <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a></li>
+                <li><a href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+                <li><a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+                </div>
+                <div class="topbar-right">
+                    <div class="dropdown">
+                        <div class="user-profile" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://i.pravatar.cc/150?img=11" alt="User">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                
+                <div class="page-title">
+                    <h2><i class="fa-solid fa-magnifying-glass text-danger me-2"></i> Advanced Search</h2>
+                </div>
+
+                <div class="card-dark p-4 mb-4">
+                    <form onsubmit="event.preventDefault(); document.getElementById('searchResults').style.display='flex';">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Blood Group</label>
+                                <select class="form-select form-control-dark">
+                                    <option value="">Any</option>
+                                    <option>A+</option><option>A-</option>
+                                    <option>B+</option><option>B-</option>
+                                    <option>O+</option><option>O-</option>
+                                    <option>AB+</option><option>AB-</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">City / Area</label>
+                                <input type="text" class="form-control form-control-dark" placeholder="e.g. Downtown">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Distance Radius</label>
+                                <select class="form-select form-control-dark">
+                                    <option>5 km</option>
+                                    <option>10 km</option>
+                                    <option>25 km</option>
+                                    <option>50 km</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary-dark w-100"><i class="fa-solid fa-search me-2"></i> Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="row" id="searchResults" style="display:none;">
+                    <div class="col-lg-5 mb-4">
+                        <div class="d-flex flex-column gap-3">
+                            <!-- Dummy Result 1 -->
+                            <div class="card-dark p-3">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="https://i.pravatar.cc/150?img=33" class="rounded-circle" width="50" height="50">
+                                        <div>
+                                            <h5 class="mb-0 text-white">James Wilson</h5>
+                                            <small class="text-muted">Downtown • 2.1 km away</small>
+                                        </div>
+                                    </div>
+                                    <div class="bg-danger text-white rounded p-2 text-center">
+                                        <strong>A+</strong>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-primary-dark flex-grow-1">View Profile</button>
+                                </div>
+                            </div>
+                            <!-- Dummy Result 2 -->
+                            <div class="card-dark p-3">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="https://i.pravatar.cc/150?img=47" class="rounded-circle" width="50" height="50">
+                                        <div>
+                                            <h5 class="mb-0 text-white">Emily Rodriguez</h5>
+                                            <small class="text-muted">Uptown • 4.5 km away</small>
+                                        </div>
+                                    </div>
+                                    <div class="bg-danger text-white rounded p-2 text-center">
+                                        <strong>A+</strong>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-primary-dark flex-grow-1">View Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-7 mb-4">
+                        <div class="card-dark p-2 text-center d-flex align-items-center justify-content-center" style="height: 400px;">
+                            <div>
+                                <i class="fa-solid fa-map-location-dot text-muted mb-3" style="font-size: 48px;"></i>
+                                <h5>Map View Enabled</h5>
+                                <p class="text-muted">Interactive map displays based on search criteria</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

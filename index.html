@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloodLink - Dashboard</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-droplet logo-icon"></i>
+                <h3>BloodLink</h3>
+            </div>
+            
+            <ul class="sidebar-nav">
+                <li><a href="index.html" class="active"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a href="donors.html"><i class="fa-solid fa-users"></i> Nearby Donors</a></li>
+                <li><a href="patients.html"><i class="fa-solid fa-bed-pulse"></i> Nearby Patients</a></li>
+                <li><a href="hospitals.html"><i class="fa-solid fa-hospital"></i> Hospitals</a></li>
+                <li><a href="search.html"><i class="fa-solid fa-magnifying-glass"></i> Search Donors</a></li>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+                <li><a href="become-donor.html"><i class="fa-solid fa-hand-holding-heart"></i> Become a Donor</a></li>
+                <li><a href="request-blood.html"><i class="fa-solid fa-kit-medical"></i> Request Blood</a></li>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+                <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a></li>
+                <li><a href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+                <li><a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Navbar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+                <div class="topbar-right">
+                    <a href="#" class="topbar-icon" data-bs-toggle="tooltip" title="Notifications">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="badge">12</span>
+                    </a>
+                    <div class="dropdown">
+                        <div class="user-profile" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://i.pravatar.cc/150?img=11" alt="User">
+                            <span class="name d-none d-md-block">Admin User</span>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="profile.html"><i class="fa-regular fa-user me-2"></i> My Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="btnLogout"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 style="margin:0;">System Dashboard</h2>
+                    <button class="btn btn-primary-dark"><i class="fa-solid fa-download me-2"></i> Generate Report</button>
+                </div>
+
+                <!-- Main Stats -->
+                <div class="row mb-4">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card-dark stat-card h-100">
+                            <div class="stat-icon red"><i class="fa-solid fa-users"></i></div>
+                            <div class="stat-details">
+                                <h3>12,450</h3>
+                                <p>Registered Donors</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card-dark stat-card h-100">
+                            <div class="stat-icon blue"><i class="fa-solid fa-bed-pulse"></i></div>
+                            <div class="stat-details">
+                                <h3>8,230</h3>
+                                <p>Total Patients</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card-dark stat-card h-100">
+                            <div class="stat-icon green"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                            <div class="stat-details">
+                                <h3>45,912</h3>
+                                <p>Total Donations</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card-dark stat-card h-100">
+                            <div class="stat-icon yellow"><i class="fa-solid fa-hospital"></i></div>
+                            <div class="stat-details">
+                                <h3>342</h3>
+                                <p>Partner Hospitals</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blood Inventory -->
+                <h4 class="mb-3">Live Blood Inventory (Units)</h4>
+                <div class="row mb-4 text-center">
+                    <!-- Generate 8 Blood groups -->
+                    <script>
+                        const groups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+                        const units = [120, 45, 150, 30, 80, 20, 200, 95];
+                        document.write(groups.map((g, i) => `
+                            <div class="col-xl-1 col-md-2 col-4 mb-3">
+                                <div class="card-dark p-3">
+                                    <h4 class="text-danger mb-1">${g}</h4>
+                                    <strong class="fs-5">${units[i]}</strong>
+                                </div>
+                            </div>
+                        `).join(''));
+                    </script>
+                </div>
+
+                <div class="row">
+                    <!-- Charts -->
+                    <div class="col-lg-8 mb-4">
+                        <div class="card-dark h-100">
+                            <div class="card-header-dark">Donation vs Request Trends (2026)</div>
+                            <div class="card-body-dark">
+                                <canvas id="trendChart" height="100"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Emergency Requests -->
+                    <div class="col-lg-4 mb-4">
+                        <div class="card-dark h-100">
+                            <div class="card-header-dark d-flex justify-content-between">
+                                <span>Emergency Requests</span>
+                                <span class="badge bg-danger">4 New</span>
+                            </div>
+                            <div class="card-body-dark p-0">
+                                <ul class="list-group list-group-flush bg-transparent">
+                                    <li class="list-group-item bg-transparent border-secondary text-white p-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <strong>O- Needed URGENTLY</strong>
+                                            <span class="badge bg-danger">High</span>
+                                        </div>
+                                        <p class="text-muted mb-0 small"><i class="fa-solid fa-hospital me-1"></i> City General Hospital (2.5 km)</p>
+                                    </li>
+                                    <li class="list-group-item bg-transparent border-secondary text-white p-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <strong>A+ Required for Surgery</strong>
+                                            <span class="badge bg-warning text-dark">Medium</span>
+                                        </div>
+                                        <p class="text-muted mb-0 small"><i class="fa-solid fa-hospital me-1"></i> Mercy Medical Center (5.1 km)</p>
+                                    </li>
+                                    <li class="list-group-item bg-transparent border-secondary text-white p-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <strong>AB- Rare Blood Request</strong>
+                                            <span class="badge bg-danger">High</span>
+                                        </div>
+                                        <p class="text-muted mb-0 small"><i class="fa-solid fa-hospital me-1"></i> St. Jude's (8.0 km)</p>
+                                    </li>
+                                </ul>
+                                <div class="p-3 text-center border-top border-secondary">
+                                    <a href="patients.html" class="text-primary text-decoration-none">View All Requests</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/app.js"></script>
+    
+    <!-- Initialize Chart -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('trendChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    datasets: [
+                        {
+                            label: 'Donations',
+                            data: [650, 590, 800, 810, 560, 550, 400],
+                            borderColor: '#198754',
+                            tension: 0.4,
+                            fill: false
+                        },
+                        {
+                            label: 'Requests',
+                            data: [280, 480, 400, 190, 860, 270, 900],
+                            borderColor: '#dc3545',
+                            tension: 0.4,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: '#fff' } }
+                    },
+                    scales: {
+                        y: { ticks: { color: '#B0B0B0' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                        x: { ticks: { color: '#B0B0B0' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

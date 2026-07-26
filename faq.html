@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - BloodLink</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-droplet logo-icon"></i>
+                <h3>BloodLink</h3>
+            </div>
+            
+            <ul class="sidebar-nav">
+                <li><a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a href="donors.html"><i class="fa-solid fa-users"></i> Nearby Donors</a></li>
+                <li><a href="patients.html"><i class="fa-solid fa-bed-pulse"></i> Nearby Patients</a></li>
+                <li><a href="hospitals.html"><i class="fa-solid fa-hospital"></i> Hospitals</a></li>
+                <li><a href="search.html"><i class="fa-solid fa-magnifying-glass"></i> Search Donors</a></li>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+                <li><a href="become-donor.html"><i class="fa-solid fa-hand-holding-heart"></i> Become a Donor</a></li>
+                <li><a href="request-blood.html"><i class="fa-solid fa-kit-medical"></i> Request Blood</a></li>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+                <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a></li>
+                <li><a href="faq.html" class="active"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+                <li><a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Navbar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+                
+                <div class="topbar-right">
+                    <a href="#" class="topbar-icon" data-bs-toggle="tooltip" title="Notifications">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="badge">3</span>
+                    </a>
+                    
+                    <div class="dropdown">
+                        <div class="user-profile" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://i.pravatar.cc/150?img=11" alt="User">
+                            <span class="name d-none d-md-block">Alex Johnson</span>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="profile.html"><i class="fa-regular fa-user me-2"></i> My Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="btnLogout"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <div class="page-title">
+                    <h2>Frequently Asked Questions</h2>
+                </div>
+                
+                
+<div class="card card-dark border-0 shadow">
+    <div class="card-body card-body-dark p-4">
+        <p class="text-muted mb-4">Find answers to the most common questions about blood donation and the BloodLink platform.</p>
+        <div class="accordion" id="faqAccordion">
+            
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading0">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse0" aria-expanded="false" aria-controls="collapse0">
+                Who can donate blood?
+            </button>
+        </h2>
+        <div id="collapse0" class="accordion-collapse collapse" aria-labelledby="heading0" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                Most people can give blood if they are in good health, between 18 and 65 years old, and weigh at least 50 kg.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading1">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+                How often can I donate blood?
+            </button>
+        </h2>
+        <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="heading1" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                Men can donate whole blood every 12 weeks, and women can donate every 16 weeks.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading2">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                Is blood donation safe?
+            </button>
+        </h2>
+        <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                Yes, absolutely. New, sterile disposable equipment is used for each donor, so there is no risk of contracting a blood-borne infection.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading3">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                Does donating blood hurt?
+            </button>
+        </h2>
+        <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                You will feel a slight pinch when the needle is inserted, but it only lasts a second. Most donors do not find it painful.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading4">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                How much blood is taken?
+            </button>
+        </h2>
+        <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                About 450ml (one pint) of blood is drawn, which is roughly 10% of the body's total volume. The body replenishes this fluid within 24 hours.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading5">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
+                How long does the donation process take?
+            </button>
+        </h2>
+        <div id="collapse5" class="accordion-collapse collapse" aria-labelledby="heading5" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                The actual blood draw takes about 8-10 minutes, but the entire process including registration and screening takes about 45-60 minutes.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading6">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
+                Can I donate if I have a tattoo or piercing?
+            </button>
+        </h2>
+        <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="heading6" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                Yes, but you usually have to wait 6 months to a year after getting a tattoo or piercing before you can donate.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading7">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse7" aria-expanded="false" aria-controls="collapse7">
+                Can I donate blood if I have a cold?
+            </button>
+        </h2>
+        <div id="collapse7" class="accordion-collapse collapse" aria-labelledby="heading7" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                No, you must be symptom-free from cold, flu, or fever on the day of donation.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading8">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse8" aria-expanded="false" aria-controls="collapse8">
+                What should I eat before donating?
+            </button>
+        </h2>
+        <div id="collapse8" class="accordion-collapse collapse" aria-labelledby="heading8" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                Eat a healthy, low-fat meal and drink plenty of fluids (water or juice) before you donate. Avoid alcohol and fatty foods.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading9">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse9" aria-expanded="false" aria-controls="collapse9">
+                Can I exercise after donating?
+            </button>
+        </h2>
+        <div id="collapse9" class="accordion-collapse collapse" aria-labelledby="heading9" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                It is recommended to avoid strenuous physical activity or heavy lifting for about 24 hours after donating.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading10">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse10" aria-expanded="false" aria-controls="collapse10">
+                What happens to my blood after donation?
+            </button>
+        </h2>
+        <div id="collapse10" class="accordion-collapse collapse" aria-labelledby="heading10" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                Your blood is tested for infectious diseases, typed, and then separated into components (red cells, plasma, platelets) to help multiple patients.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading11">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse11" aria-expanded="false" aria-controls="collapse11">
+                How do I request blood on BloodLink?
+            </button>
+        </h2>
+        <div id="collapse11" class="accordion-collapse collapse" aria-labelledby="heading11" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                Go to the 'Request Blood' page, fill in the patient details, hospital location, and required blood type. The request is then broadcast to eligible nearby donors.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading12">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse12" aria-expanded="false" aria-controls="collapse12">
+                How is my privacy protected?
+            </button>
+        </h2>
+        <div id="collapse12" class="accordion-collapse collapse" aria-labelledby="heading12" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                BloodLink encrypts all user data. Your contact details are only shared with matching donors/patients upon mutual consent or strict algorithmic matching.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading13">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse13" aria-expanded="false" aria-controls="collapse13">
+                Can hospitals use BloodLink?
+            </button>
+        </h2>
+        <div id="collapse13" class="accordion-collapse collapse" aria-labelledby="heading13" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                Yes, hospitals can register to manage their inventory and directly request blood in emergency situations.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading14">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse14" aria-expanded="false" aria-controls="collapse14">
+                Is the platform free to use?
+            </button>
+        </h2>
+        <div id="collapse14" class="accordion-collapse collapse" aria-labelledby="heading14" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                Yes, BloodLink is entirely free for both donors and patients. We strictly oppose buying or selling blood.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading15">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse15" aria-expanded="false" aria-controls="collapse15">
+                How does GPS location help?
+            </button>
+        </h2>
+        <div id="collapse15" class="accordion-collapse collapse" aria-labelledby="heading15" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                GPS location helps us find the nearest available donors to a patient's hospital to ensure the fastest possible response in emergencies.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading16">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse16" aria-expanded="false" aria-controls="collapse16">
+                Can I donate if I am taking medication?
+            </button>
+        </h2>
+        <div id="collapse16" class="accordion-collapse collapse" aria-labelledby="heading16" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                It depends on the medication. Many common medications (like blood pressure drugs) are acceptable, but you must list them during medical screening.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading17">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse17" aria-expanded="false" aria-controls="collapse17">
+                What if I don't know my blood group?
+            </button>
+        </h2>
+        <div id="collapse17" class="accordion-collapse collapse" aria-labelledby="heading17" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                You can still register. However, you will need to find out your blood group (e.g., through a simple lab test or previous medical records) before making your first targeted donation.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading18">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse18" aria-expanded="false" aria-controls="collapse18">
+                Can I delete my account?
+            </button>
+        </h2>
+        <div id="collapse18" class="accordion-collapse collapse" aria-labelledby="heading18" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                Yes, you can deactivate or delete your account at any time through the profile settings.
+            </div>
+        </div>
+    </div>
+    
+    <div class="accordion-item bg-dark text-white border-secondary mb-2 rounded">
+        <h2 class="accordion-header" id="heading19">
+            <button class="accordion-button collapsed bg-dark text-white shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse19" aria-expanded="false" aria-controls="collapse19">
+                What is the difference between Whole Blood and Platelet donation?
+            </button>
+        </h2>
+        <div id="collapse19" class="accordion-collapse collapse" aria-labelledby="heading19" data-bs-parent="#faqAccordion">
+            <div class="accordion-body border-top border-secondary text-muted">
+                Whole blood is the standard donation. Platelet donation uses a machine to extract only platelets and returns the rest of the blood to your body, allowing you to donate more frequently.
+            </div>
+        </div>
+    </div>
+    
+        </div>
+    </div>
+</div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

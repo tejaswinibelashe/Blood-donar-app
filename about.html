@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - BloodLink</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-droplet logo-icon"></i>
+                <h3>BloodLink</h3>
+            </div>
+            
+            <ul class="sidebar-nav">
+                <li><a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a href="donors.html"><i class="fa-solid fa-users"></i> Nearby Donors</a></li>
+                <li><a href="patients.html"><i class="fa-solid fa-bed-pulse"></i> Nearby Patients</a></li>
+                <li><a href="hospitals.html"><i class="fa-solid fa-hospital"></i> Hospitals</a></li>
+                <li><a href="search.html"><i class="fa-solid fa-magnifying-glass"></i> Search Donors</a></li>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+                <li><a href="become-donor.html"><i class="fa-solid fa-hand-holding-heart"></i> Become a Donor</a></li>
+                <li><a href="request-blood.html"><i class="fa-solid fa-kit-medical"></i> Request Blood</a></li>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+                <li><a href="about.html" class="active"><i class="fa-solid fa-circle-info"></i> About Us</a></li>
+                <li><a href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+                <li><a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Navbar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+                
+                <div class="topbar-right">
+                    <a href="#" class="topbar-icon" data-bs-toggle="tooltip" title="Notifications">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="badge">3</span>
+                    </a>
+                    
+                    <div class="dropdown">
+                        <div class="user-profile" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://i.pravatar.cc/150?img=11" alt="User">
+                            <span class="name d-none d-md-block">Alex Johnson</span>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="profile.html"><i class="fa-regular fa-user me-2"></i> My Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="btnLogout"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <div class="page-title">
+                    <h2>About Us</h2>
+                </div>
+                
+                
+<div class="row g-4 mb-4">
+    <div class="col-12">
+        <div class="card card-dark border-0 shadow">
+            <div class="card-header card-header-dark">
+                <h5 class="mb-0"><i class="fa-solid fa-building me-2"></i>Company Intro</h5>
+            </div>
+            <div class="card-body card-body-dark">
+                <p>BloodLink is a leading digital health platform dedicated to connecting blood donors with patients and hospitals in real-time. Since our inception, we have built a robust ecosystem that simplifies the blood donation and request process.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card card-dark border-0 shadow h-100">
+            <div class="card-header card-header-dark"><h5 class="mb-0">Mission</h5></div>
+            <div class="card-body card-body-dark">
+                <p>To ensure that nobody loses their life due to a shortage of blood by creating a seamless, accessible, and fast blood donation network.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-dark border-0 shadow h-100">
+            <div class="card-header card-header-dark"><h5 class="mb-0">Vision</h5></div>
+            <div class="card-body card-body-dark">
+                <p>A world where every community is self-sufficient in its blood supply, fostering a culture of regular voluntary blood donation.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-12">
+        <div class="card card-dark border-0 shadow">
+            <div class="card-header card-header-dark"><h5 class="mb-0">Our Services</h5></div>
+            <div class="card-body card-body-dark">
+                <ul>
+                    <li>Emergency Blood Request Matching</li>
+                    <li>Donor Scheduling and Alerts</li>
+                    <li>Hospital Inventory Management</li>
+                    <li>Community Blood Drive Organizing</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-12"><h4 class="text-white mt-3">Meet Our Team</h4></div>
+    <div class="col-md-4">
+        <div class="card card-dark border-0 shadow text-center">
+            <div class="card-body card-body-dark">
+                <img src="https://i.pravatar.cc/150?img=33" class="rounded-circle mb-3 border" width="100" alt="Sarah Jenkins">
+                <h5 class="text-white">Sarah Jenkins</h5>
+                <p class="text-muted">Founder & CEO</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-dark border-0 shadow text-center">
+            <div class="card-body card-body-dark">
+                <img src="https://i.pravatar.cc/150?img=11" class="rounded-circle mb-3 border" width="100" alt="Michael Chen">
+                <h5 class="text-white">Michael Chen</h5>
+                <p class="text-muted">Chief Technology Officer</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-dark border-0 shadow text-center">
+            <div class="card-body card-body-dark">
+                <img src="https://i.pravatar.cc/150?img=47" class="rounded-circle mb-3 border" width="100" alt="Dr. Alisha Patel">
+                <h5 class="text-white">Dr. Alisha Patel</h5>
+                <p class="text-muted">Head of Medical Operations</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card card-dark border-0 shadow text-center">
+            <div class="card-body card-body-dark">
+                <h3 class="text-danger">50,000+</h3>
+                <p class="mb-0 text-white">Registered Donors</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-dark border-0 shadow text-center">
+            <div class="card-body card-body-dark">
+                <h3 class="text-danger">120+</h3>
+                <p class="mb-0 text-white">Partner Hospitals</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-dark border-0 shadow text-center">
+            <div class="card-body card-body-dark">
+                <h3 class="text-danger">15,000+</h3>
+                <p class="mb-0 text-white">Lives Saved</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card card-dark border-0 shadow h-100">
+            <div class="card-header card-header-dark"><h5 class="mb-0">Awards & Recognition</h5></div>
+            <div class="card-body card-body-dark">
+                <ul>
+                    <li>Global Health Innovation Award 2024</li>
+                    <li>Best Tech for Good - NGO Awards 2023</li>
+                    <li>Excellence in Digital Healthcare 2022</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-dark border-0 shadow h-100">
+            <div class="card-header card-header-dark"><h5 class="mb-0">Timeline</h5></div>
+            <div class="card-body card-body-dark">
+                <ul class="timeline-list text-white">
+                    <li><strong>2020:</strong> BloodLink Concept Born</li>
+                    <li><strong>2021:</strong> App Launch & First 1,000 Donors</li>
+                    <li><strong>2023:</strong> Expanded to 50+ Cities</li>
+                    <li><strong>2025:</strong> Reached 50,000 Donors Milestone</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-12">
+        <div class="card card-dark border-0 shadow">
+            <div class="card-header card-header-dark"><h5 class="mb-0">Testimonials</h5></div>
+            <div class="card-body card-body-dark">
+                <blockquote class="blockquote text-white mb-4">
+                    <p>"BloodLink saved my father's life when we urgently needed O- negative blood. A donor was matched within minutes."</p>
+                    <footer class="blockquote-footer mt-1 text-muted">Rajeev S.</footer>
+                </blockquote>
+                <blockquote class="blockquote text-white">
+                    <p>"As a regular donor, the platform makes it so easy to know when and where I can donate next. Highly recommended!"</p>
+                    <footer class="blockquote-footer mt-1 text-muted">Anita K.</footer>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

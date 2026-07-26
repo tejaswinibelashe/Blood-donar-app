@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloodLink - Nearby Patients</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+    <div class="wrapper">
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-droplet logo-icon"></i>
+                <h3>BloodLink</h3>
+            </div>
+            
+            <ul class="sidebar-nav">
+                <li><a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a href="donors.html"><i class="fa-solid fa-users"></i> Nearby Donors</a></li>
+                <li><a href="patients.html" class="active"><i class="fa-solid fa-bed-pulse"></i> Nearby Patients</a></li>
+                <li><a href="hospitals.html"><i class="fa-solid fa-hospital"></i> Hospitals</a></li>
+                <li><a href="search.html"><i class="fa-solid fa-magnifying-glass"></i> Search Donors</a></li>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+                <li><a href="become-donor.html"><i class="fa-solid fa-hand-holding-heart"></i> Become a Donor</a></li>
+                <li><a href="request-blood.html"><i class="fa-solid fa-kit-medical"></i> Request Blood</a></li>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+                <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a></li>
+                <li><a href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+                <li><a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+                </div>
+                <div class="topbar-right">
+                    <div class="dropdown">
+                        <div class="user-profile" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://i.pravatar.cc/150?img=11" alt="User">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                
+                <div class="page-title">
+                    <h2><i class="fa-solid fa-bed-pulse text-danger me-2"></i> Emergency Requests (Patients)</h2>
+                    <button class="btn btn-outline-dark" id="btnLocate"><i class="fa-solid fa-location-dot me-2"></i> Find Nearest Patients</button>
+                </div>
+
+                <div class="row">
+                    <!-- Filters and List -->
+                    <div class="col-lg-5 mb-4">
+                        <div id="patientsList" class="d-flex flex-column gap-3" style="max-height: 700px; overflow-y: auto;">
+                            <div class="text-center p-5 text-muted" id="loadingData">
+                                <div class="spinner-border text-danger mb-3" role="status"></div>
+                                <p>Finding urgent requests near you...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Map -->
+                    <div class="col-lg-7 mb-4">
+                        <div class="card-dark p-2" style="position: sticky; top: 100px;">
+                            <div id="map"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="assets/js/app.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let map;
+            
+            const patients = [
+                { id: 1, name: 'Alice Walker', group: 'AB-', units: 2, hospital: 'City General Hospital', level: 'High', latOffset: 0.02, lngOffset: 0.03, phone: '+123456789' },
+                { id: 2, name: 'Robert King', group: 'O-', units: 1, hospital: 'Mercy Medical Center', level: 'Medium', latOffset: -0.01, lngOffset: -0.02, phone: '+987654321' },
+                { id: 3, name: 'Lucas Green', group: 'B+', units: 4, hospital: 'St. Jude Blood Bank', level: 'Critical', latOffset: 0.04, lngOffset: -0.01, phone: '+112233445' }
+            ];
+
+            function initMap(lat, lng) {
+                if(map) { map.remove(); }
+                map = L.map('map').setView([lat, lng], 12);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+                L.marker([lat, lng], {
+                    icon: L.icon({
+                        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                        iconSize: [25, 41], iconAnchor: [12, 41]
+                    })
+                }).addTo(map).bindPopup("<b>You</b>").openPopup();
+
+                renderList(lat, lng);
+            }
+
+            function renderList(userLat, userLng) {
+                const listEl = document.getElementById('patientsList');
+                listEl.innerHTML = '';
+
+                let dataWithDistance = patients.map(d => {
+                    d.actualLat = userLat + d.latOffset;
+                    d.actualLng = userLng + d.lngOffset;
+                    d.distance = parseFloat(App.calculateDistance(userLat, userLng, d.actualLat, d.actualLng));
+                    return d;
+                }).sort((a,b) => {
+                    // Sort by urgency then distance
+                    const levels = { 'Critical': 1, 'High': 2, 'Medium': 3, 'Low': 4 };
+                    if(levels[a.level] !== levels[b.level]) return levels[a.level] - levels[b.level];
+                    return a.distance - b.distance;
+                });
+
+                dataWithDistance.forEach(d => {
+                    const badgeColor = d.level === 'Critical' ? 'bg-danger' : (d.level === 'High' ? 'bg-warning text-dark' : 'bg-info text-dark');
+                    
+                    L.marker([d.actualLat, d.actualLng], {
+                        icon: L.icon({
+                            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                            iconSize: [25, 41], iconAnchor: [12, 41]
+                        })
+                    }).addTo(map).bindPopup(`<b>${d.name}</b><br>Needs: ${d.group}`);
+
+                    listEl.innerHTML += `
+                        <div class="card-dark p-3 border-start border-danger border-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="mb-0 text-white">${d.name}</h5>
+                                <span class="badge ${badgeColor}">${d.level} Priority</span>
+                            </div>
+                            <p class="text-muted small mb-2"><i class="fa-solid fa-hospital me-1"></i> ${d.hospital}</p>
+                            
+                            <div class="row text-center bg-dark rounded p-2 mb-3">
+                                <div class="col-4 border-end border-secondary">
+                                    <small class="text-muted d-block">Group</small>
+                                    <strong class="text-danger">${d.group}</strong>
+                                </div>
+                                <div class="col-4 border-end border-secondary">
+                                    <small class="text-muted d-block">Units</small>
+                                    <strong class="text-white">${d.units}</strong>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted d-block">Distance</small>
+                                    <strong class="text-white">${d.distance}km</strong>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-primary-dark flex-grow-1" onclick="alert('Donation Request Accepted! Hospital notified.')"><i class="fa-solid fa-hand-holding-heart me-2"></i> Accept Request</button>
+                                <a href="https://www.google.com/maps/dir/?api=1&destination=${d.actualLat},${d.actualLng}" target="_blank" class="btn btn-outline-dark"><i class="fa-solid fa-diamond-turn-right"></i></a>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            document.getElementById('btnLocate').addEventListener('click', () => {
+                document.getElementById('loadingData').style.display = 'block';
+                App.getLocation(
+                    (coords) => initMap(coords.lat, coords.lng),
+                    (err) => initMap(40.7128, -74.0060)
+                );
+            });
+
+            document.getElementById('btnLocate').click();
+        });
+    </script>
+</body>
+</html>

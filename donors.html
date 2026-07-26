@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloodLink - Nearby Donors</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Leaflet CSS for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-droplet logo-icon"></i>
+                <h3>BloodLink</h3>
+            </div>
+            
+            <ul class="sidebar-nav">
+                <li><a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a href="donors.html" class="active"><i class="fa-solid fa-users"></i> Nearby Donors</a></li>
+                <li><a href="patients.html"><i class="fa-solid fa-bed-pulse"></i> Nearby Patients</a></li>
+                <li><a href="hospitals.html"><i class="fa-solid fa-hospital"></i> Hospitals</a></li>
+                <li><a href="search.html"><i class="fa-solid fa-magnifying-glass"></i> Search Donors</a></li>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+                <li><a href="become-donor.html"><i class="fa-solid fa-hand-holding-heart"></i> Become a Donor</a></li>
+                <li><a href="request-blood.html"><i class="fa-solid fa-kit-medical"></i> Request Blood</a></li>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+                <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a></li>
+                <li><a href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+                <li><a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Navbar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+                </div>
+                <div class="topbar-right">
+                    <div class="dropdown">
+                        <div class="user-profile" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://i.pravatar.cc/150?img=11" alt="User">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                
+                <div class="page-title">
+                    <h2><i class="fa-solid fa-location-crosshairs text-danger me-2"></i> Nearby Donors</h2>
+                    <button class="btn btn-outline-dark" id="btnLocate"><i class="fa-solid fa-location-dot me-2"></i> Find My Location</button>
+                </div>
+
+                <div class="row">
+                    <!-- Filters and List -->
+                    <div class="col-lg-5 mb-4">
+                        <div class="card-dark mb-3 p-3">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <select class="form-select form-control-dark" id="bloodFilter">
+                                        <option value="all">All Groups</option>
+                                        <option>A+</option><option>O+</option><option>AB-</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <select class="form-select form-control-dark">
+                                        <option>Within 5 km</option>
+                                        <option>Within 10 km</option>
+                                        <option>Within 25 km</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="donorsList" class="d-flex flex-column gap-3" style="max-height: 600px; overflow-y: auto;">
+                            <div class="text-center p-5 text-muted" id="loadingDonors">
+                                <div class="spinner-border text-danger mb-3" role="status"></div>
+                                <p>Locating you to find nearby donors...</p>
+                            </div>
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- Map -->
+                    <div class="col-lg-7 mb-4">
+                        <div class="card-dark p-2">
+                            <div id="map"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="assets/js/app.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let map;
+            let userMarker;
+            
+            // Mock Donors Dataset
+            const donors = [
+                { id: 1, name: 'Michael Smith', group: 'O+', age: 28, latOffset: 0.01, lngOffset: 0.015, phone: '+123456789' },
+                { id: 2, name: 'Emma Johnson', group: 'A-', age: 34, latOffset: -0.02, lngOffset: 0.005, phone: '+987654321' },
+                { id: 3, name: 'David Lee', group: 'AB+', age: 41, latOffset: 0.005, lngOffset: -0.025, phone: '+112233445' },
+                { id: 4, name: 'Sarah Connor', group: 'O-', age: 25, latOffset: -0.015, lngOffset: -0.01, phone: '+554433221' }
+            ];
+
+            function initMap(lat, lng) {
+                if(map) { map.remove(); }
+                map = L.map('map').setView([lat, lng], 13);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
+
+                // User Marker
+                userMarker = L.marker([lat, lng], {
+                    icon: L.icon({
+                        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                        iconSize: [25, 41], iconAnchor: [12, 41]
+                    })
+                }).addTo(map).bindPopup("<b>You are here!</b>").openPopup();
+
+                renderDonors(lat, lng);
+            }
+
+            function renderDonors(userLat, userLng) {
+                const listEl = document.getElementById('donorsList');
+                listEl.innerHTML = '';
+
+                // Calculate real distances based on dynamic offsets
+                let donorsWithDistance = donors.map(d => {
+                    d.actualLat = userLat + d.latOffset;
+                    d.actualLng = userLng + d.lngOffset;
+                    d.distance = parseFloat(App.calculateDistance(userLat, userLng, d.actualLat, d.actualLng));
+                    return d;
+                }).sort((a,b) => a.distance - b.distance);
+
+                donorsWithDistance.forEach(d => {
+                    // Add Map Marker
+                    L.marker([d.actualLat, d.actualLng], {
+                        icon: L.icon({
+                            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                            iconSize: [25, 41], iconAnchor: [12, 41]
+                        })
+                    }).addTo(map).bindPopup(`<b>${d.name}</b><br>Blood: ${d.group}`);
+
+                    // Add to List
+                    listEl.innerHTML += `
+                        <div class="card-dark p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <img src="https://i.pravatar.cc/150?u=${d.id}" class="rounded-circle" width="50" height="50">
+                                    <div>
+                                        <h5 class="mb-0 text-white">${d.name}</h5>
+                                        <small class="text-muted">${d.distance} km away • ${d.age} Yrs</small>
+                                    </div>
+                                </div>
+                                <div class="bg-danger text-white rounded p-2 text-center" style="min-width: 50px;">
+                                    <strong>${d.group}</strong>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="tel:${d.phone}" class="btn btn-primary-dark flex-grow-1"><i class="fa-solid fa-phone me-2"></i> Call</a>
+                                <a href="https://www.google.com/maps/dir/?api=1&destination=${d.actualLat},${d.actualLng}" target="_blank" class="btn btn-outline-dark"><i class="fa-solid fa-location-arrow"></i></a>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            // Start Geolocation flow
+            document.getElementById('btnLocate').addEventListener('click', () => {
+                document.getElementById('loadingDonors').innerHTML = '<div class="spinner-border text-danger mb-3" role="status"></div><p>Locating you to find nearby donors...</p>';
+                document.getElementById('loadingDonors').style.display = 'block';
+                
+                App.getLocation(
+                    (coords) => {
+                        initMap(coords.lat, coords.lng);
+                    },
+                    (err) => {
+                        alert("Could not get your location. Displaying default location (New York).");
+                        initMap(40.7128, -74.0060); // Default to NY
+                    }
+                );
+            });
+
+            // Auto trigger on load
+            document.getElementById('btnLocate').click();
+        });
+    </script>
+</body>
+</html>

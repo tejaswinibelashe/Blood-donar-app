@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- Sender (Right aligned) -->
+    <LinearLayout
+        android:id="@+id/layoutSender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@drawable/bg_chat_bubble_sender"
+        android:backgroundTint="@color/dark_red"
+        android:padding="12dp"
+        android:layout_marginStart="64dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvSenderMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I am on my way to the hospital!"
+            android:textColor="@color/white" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10:42 AM"
+            android:textColor="#DDDDDD"
+            android:textSize="10sp"
+            android:layout_gravity="end"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+    <!-- Receiver (Left aligned) -->
+    <LinearLayout
+        android:id="@+id/layoutReceiver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:background="@drawable/bg_chat_bubble_receiver"
+        android:backgroundTint="@color/surface_dark"
+        android:padding="12dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <TextView
+            android:id="@+id/tvReceiverMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thank you so much! See you soon."
+            android:textColor="@color/white" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10:43 AM"
+            android:textColor="@color/text_secondary"
+            android:textSize="10sp"
+            android:layout_gravity="start"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+</LinearLayout>

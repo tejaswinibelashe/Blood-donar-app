@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Blood - BloodLink</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-droplet logo-icon"></i>
+                <h3>BloodLink</h3>
+            </div>
+            
+            <ul class="sidebar-nav">
+                <li><a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a href="donors.html"><i class="fa-solid fa-users"></i> Nearby Donors</a></li>
+                <li><a href="patients.html"><i class="fa-solid fa-bed-pulse"></i> Nearby Patients</a></li>
+                <li><a href="hospitals.html"><i class="fa-solid fa-hospital"></i> Hospitals</a></li>
+                <li><a href="search.html"><i class="fa-solid fa-magnifying-glass"></i> Search Donors</a></li>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+                <li><a href="become-donor.html"><i class="fa-solid fa-hand-holding-heart"></i> Become a Donor</a></li>
+                <li><a href="request-blood.html" class="active"><i class="fa-solid fa-kit-medical"></i> Request Blood</a></li>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+                <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a></li>
+                <li><a href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+                <li><a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Navbar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+                
+                <div class="topbar-right">
+                    <a href="#" class="topbar-icon" data-bs-toggle="tooltip" title="Notifications">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="badge">3</span>
+                    </a>
+                    
+                    <div class="dropdown">
+                        <div class="user-profile" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://i.pravatar.cc/150?img=11" alt="User">
+                            <span class="name d-none d-md-block">Alex Johnson</span>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="profile.html"><i class="fa-regular fa-user me-2"></i> My Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="btnLogout"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <div class="page-title">
+                    <h2>Request Blood</h2>
+                </div>
+                
+                
+<!-- Toast Notification -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="requestSuccessToast" class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        <i class="fa-solid fa-check-circle me-2"></i> Blood request submitted successfully. We are alerting nearby donors!
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<div class="card card-dark border-0 shadow">
+    <div class="card-header bg-danger text-white border-0">
+        <h5 class="mb-0"><i class="fa-solid fa-truck-medical me-2"></i>Emergency Blood Request</h5>
+    </div>
+    <div class="card-body card-body-dark">
+        <form onsubmit="event.preventDefault(); var t = new bootstrap.Toast(document.getElementById('requestSuccessToast')); t.show(); this.reset();">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label text-white">Patient Name *</label>
+                    <input type="text" class="form-control bg-dark text-white border-secondary" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-white">Blood Group Required *</label>
+                    <select class="form-select bg-dark text-white border-secondary" required>
+                        <option value="">Select</option>
+                        <option>A+</option><option>A-</option>
+                        <option>B+</option><option>B-</option>
+                        <option>AB+</option><option>AB-</option>
+                        <option>O+</option><option>O-</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-white">Number of Units *</label>
+                    <input type="number" class="form-control bg-dark text-white border-secondary" min="1" max="10" required>
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="form-label text-white">Hospital Name & Ward *</label>
+                    <input type="text" class="form-control bg-dark text-white border-secondary" placeholder="e.g. City Hospital, ICU Ward" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-white">Attendant Contact Number *</label>
+                    <input type="tel" class="form-control bg-dark text-white border-secondary" required>
+                </div>
+                
+                <div class="col-md-4">
+                    <label class="form-label text-white">Required Date *</label>
+                    <input type="date" class="form-control bg-dark text-white border-secondary" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-white">Emergency Level *</label>
+                    <select class="form-select bg-dark text-white border-secondary" required>
+                        <option value="">Select</option>
+                        <option value="Low">Low (Within 48 hours)</option>
+                        <option value="Med">Medium (Within 24 hours)</option>
+                        <option value="High" class="text-danger fw-bold">High (Immediate/Critical)</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-white">City *</label>
+                    <input type="text" class="form-control bg-dark text-white border-secondary" required>
+                </div>
+                
+                <div class="col-12 mt-2">
+                    <button type="button" class="btn btn-outline-danger"><i class="fa-solid fa-location-crosshairs me-2"></i>Set Current GPS Location</button>
+                    <small class="text-muted ms-2">Pins the exact location for donors to navigate.</small>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label text-white">Additional Notes / Doctor's Comments</label>
+                    <textarea class="form-control bg-dark text-white border-secondary" rows="3" placeholder="Any specific requirements..."></textarea>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-danger w-100 py-2 fs-5 fw-bold"><i class="fa-solid fa-satellite-dish me-2"></i> Broadcast Request Now</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
