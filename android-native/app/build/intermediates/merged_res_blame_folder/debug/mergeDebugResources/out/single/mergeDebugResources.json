@@ -1,15 +1,15 @@
 [
     {
-        "merged": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-debug-4:\\layout_activity_chat.xml.flat",
-        "source": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-main-6:\\layout\\activity_chat.xml"
+        "merged": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-debug-4:\\mipmap_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-main-6:\\mipmap\\ic_launcher_round.xml"
     },
     {
         "merged": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-debug-4:\\mipmap_ic_launcher.xml.flat",
         "source": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-main-6:\\mipmap\\ic_launcher.xml"
     },
     {
-        "merged": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-debug-4:\\mipmap_ic_launcher_round.xml.flat",
-        "source": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-main-6:\\mipmap\\ic_launcher_round.xml"
+        "merged": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-debug-4:\\layout_activity_chat.xml.flat",
+        "source": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-main-6:\\layout\\activity_chat.xml"
     },
     {
         "merged": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-debug-4:\\layout_item_chat_message.xml.flat",
@@ -24,6 +24,10 @@
         "source": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-main-6:\\layout\\activity_welcome.xml"
     },
     {
+        "merged": "com.bloodlink.app-debug-4:/menu_menu_dashboard.xml.flat",
+        "source": "com.bloodlink.app-main-6:/menu/menu_dashboard.xml"
+    },
+    {
         "merged": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-debug-4:\\layout_activity_splash.xml.flat",
         "source": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-main-6:\\layout\\activity_splash.xml"
     },
@@ -34,6 +38,10 @@
     {
         "merged": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-debug-4:\\layout_activity_register.xml.flat",
         "source": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-main-6:\\layout\\activity_register.xml"
+    },
+    {
+        "merged": "com.bloodlink.app-debug-4:/layout_activity_donor_dashboard.xml.flat",
+        "source": "com.bloodlink.app-main-6:/layout/activity_donor_dashboard.xml"
     },
     {
         "merged": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-debug-4:\\layout_activity_login.xml.flat",
@@ -76,8 +84,8 @@
         "source": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-main-6:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
     },
     {
-        "merged": "com.bloodlink.app-debug-4:/layout_activity_register.xml.flat",
-        "source": "com.bloodlink.app-main-6:/layout/activity_register.xml"
+        "merged": "com.bloodlink.app-debug-4:/layout_activity_patient_dashboard.xml.flat",
+        "source": "com.bloodlink.app-main-6:/layout/activity_patient_dashboard.xml"
     },
     {
         "merged": "C:\\Users\\maddu\\OneDrive\\Documents\\Blood Doner app\\daemon\\9.0.0\\com.bloodlink.app-debug-4:\\layout_activity_forgot_password.xml.flat",

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="assets/js/auth.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BloodLink - Sign In</title>
@@ -64,13 +65,17 @@
                 <p class="text-muted">Sign in to your account</p>
             </div>
             
-            <form id="loginForm" onsubmit="event.preventDefault(); localStorage.setItem('bloodlink_user', 'admin'); window.location.href='index.html';">
+            <form id="loginForm">
                 
+                <div id="loginError" class="alert alert-danger d-none" role="alert">
+                    Invalid Email or Password
+                </div>
+
                 <div class="mb-3">
-                    <label class="form-label">Email or Username</label>
+                    <label class="form-label">Email Address</label>
                     <div class="input-group">
-                        <span class="input-group-text bg-dark border-secondary text-muted"><i class="fa-solid fa-user"></i></span>
-                        <input type="text" class="form-control form-control-dark" required>
+                        <span class="input-group-text bg-dark border-secondary text-muted"><i class="fa-solid fa-envelope"></i></span>
+                        <input type="email" id="emailField" class="form-control form-control-dark" required>
                     </div>
                 </div>
                 
@@ -114,6 +119,40 @@
                 icon.classList.replace('fa-eye-slash', 'fa-eye');
             }
         }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('emailField').value;
+            const password = document.getElementById('passwordField').value;
+            const errorDiv = document.getElementById('loginError');
+            const submitBtn = this.querySelector('button[type="submit"]');
+
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> Signing In...';
+            submitBtn.disabled = true;
+            errorDiv.classList.add('d-none');
+
+            fetch('http://localhost:8080/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, password: password })
+            })
+            .then(res => {
+                if(!res.ok) throw new Error('Invalid Credentials');
+                return res.json();
+            })
+            .then(data => {
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                window.location.replace('index.html');
+            })
+            .catch(err => {
+                errorDiv.innerText = err.message === 'Failed to fetch' ? 'Unable to connect to server' : 'Invalid Email or Password';
+                errorDiv.classList.remove('d-none');
+                submitBtn.innerHTML = 'Sign In';
+                submitBtn.disabled = false;
+            });
+        });
     </script>
 </body>
 </html>

@@ -39,7 +39,7 @@ public class DonorService {
             double distance = GpsUtils.calculateDistance(searchLat, searchLng, donorLat, donorLng);
             
             if (distance <= radiusKm) {
-                UserDTO dto = userMapper.toDto(donor);
+                UserDTO dto = userMapper.toDto(donor.getUser());
                 // In a true DTO we might add a 'distance' field specifically for this response
                 nearbyDonors.add(dto);
             }
@@ -47,5 +47,13 @@ public class DonorService {
         
         // Sort by closest distance (currently omitted as DTO lacks distance field for this mock)
         return nearbyDonors;
+    }
+    
+    public List<Donor> getAllDonors() {
+        return donorRepository.findAll();
+    }
+    
+    public List<Donor> getDonorsByBloodGroup(String bloodGroup) {
+        return donorRepository.findByBloodGroupAndIsAvailableTrue(bloodGroup);
     }
 }

@@ -12,4 +12,3 @@ include ':app'
 project(':app').projectDir = new File('android-native/app')
 
 include ':android-wrapper'
-include ':backend'

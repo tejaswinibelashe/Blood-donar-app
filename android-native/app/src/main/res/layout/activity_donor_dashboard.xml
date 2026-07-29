@@ -73,7 +73,18 @@
                 android:id="@+id/rvIncomingRequests"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
                 android:nestedScrollingEnabled="false" />
+                
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSignOut"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign Out"
+                android:textColor="@color/white"
+                app:strokeColor="@color/white"
+                app:cornerRadius="8dp" />
                 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -1,7 +1,6 @@
 package com.bloodlink.api.controller;
 
 import com.bloodlink.api.entity.Donor;
-import com.bloodlink.api.repository.DonorRepository;
 import com.bloodlink.api.service.DonorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,17 +12,15 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class DonorController {
 
-    private final DonorRepository donorRepository;
     private final DonorService donorService;
 
-    public DonorController(DonorRepository donorRepository, DonorService donorService) {
-        this.donorRepository = donorRepository;
+    public DonorController(DonorService donorService) {
         this.donorService = donorService;
     }
 
     @GetMapping
     public List<Donor> getAllDonors() {
-        return donorRepository.findAll();
+        return donorService.getAllDonors();
     }
 
     @GetMapping("/nearby")
@@ -33,6 +30,6 @@ public class DonorController {
 
     @GetMapping("/group/{bloodGroup}")
     public List<Donor> getDonorsByBloodGroup(@PathVariable String bloodGroup) {
-        return donorRepository.findByBloodGroupAndIsAvailableTrue(bloodGroup);
+        return donorService.getDonorsByBloodGroup(bloodGroup);
     }
 }

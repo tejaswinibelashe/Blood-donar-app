@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:2:1-41:12
-INJECTED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:2:1-41:12
-INJECTED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:2:1-41:12
-INJECTED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:2:1-41:12
+ADDED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:2:1-43:12
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\maddu\OneDrive\Documents\Blood Doner app\caches\9.0.0\transforms\8ed544efa515f1876a47cfec5b293929\transformed\material-1.11.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\maddu\OneDrive\Documents\Blood Doner app\caches\9.0.0\transforms\4b981e6f13837517f9dc6c1ffaa2acfc\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\maddu\OneDrive\Documents\Blood Doner app\caches\9.0.0\transforms\4aeff8ae4ce03ad70e957c97edf8295c\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:17:1-22:12
@@ -78,8 +78,8 @@ ADDED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\
 	android:name
 		ADDED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:9:22-66
 application
-ADDED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:11:5-39:19
-INJECTED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:11:5-39:19
+ADDED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:11:5-41:19
+INJECTED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:11:5-41:19
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\maddu\OneDrive\Documents\Blood Doner app\caches\9.0.0\transforms\8ed544efa515f1876a47cfec5b293929\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\maddu\OneDrive\Documents\Blood Doner app\caches\9.0.0\transforms\8ed544efa515f1876a47cfec5b293929\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\maddu\OneDrive\Documents\Blood Doner app\caches\9.0.0\transforms\4b981e6f13837517f9dc6c1ffaa2acfc\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -172,6 +172,18 @@ ADDED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\
 		ADDED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:37:58-108
 	android:name
 		ADDED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:37:19-57
+activity#com.bloodlink.app.DonorDashboardActivity
+ADDED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:38:9-111
+	android:theme
+		ADDED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:38:58-108
+	android:name
+		ADDED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:38:19-57
+activity#com.bloodlink.app.PatientDashboardActivity
+ADDED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:39:9-113
+	android:theme
+		ADDED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:39:60-110
+	android:name
+		ADDED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml:39:19-59
 uses-sdk
 INJECTED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\maddu\OneDrive\Documents\Blood Doner app\android-native\app\src\main\AndroidManifest.xml

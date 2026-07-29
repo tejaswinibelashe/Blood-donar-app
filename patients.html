@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="assets/js/auth.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BloodLink - Nearby Patients</title>
@@ -86,11 +87,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             let map;
             
-            const patients = [
-                { id: 1, name: 'Alice Walker', group: 'AB-', units: 2, hospital: 'City General Hospital', level: 'High', latOffset: 0.02, lngOffset: 0.03, phone: '+123456789' },
-                { id: 2, name: 'Robert King', group: 'O-', units: 1, hospital: 'Mercy Medical Center', level: 'Medium', latOffset: -0.01, lngOffset: -0.02, phone: '+987654321' },
-                { id: 3, name: 'Lucas Green', group: 'B+', units: 4, hospital: 'St. Jude Blood Bank', level: 'Critical', latOffset: 0.04, lngOffset: -0.01, phone: '+112233445' }
-            ];
+            let patients = [];
 
             function initMap(lat, lng) {
                 if(map) { map.remove(); }
@@ -105,7 +102,30 @@
                     })
                 }).addTo(map).bindPopup("<b>You</b>").openPopup();
 
-                renderList(lat, lng);
+                fetchPatientsFromBackend(lat, lng);
+            }
+            
+            function fetchPatientsFromBackend(userLat, userLng) {
+                fetch('http://localhost:8080/api/users?role=PATIENT')
+                    .then(response => response.json())
+                    .then(data => {
+                        patients = data.map(u => ({
+                            id: u.id,
+                            name: u.fullName,
+                            group: u.bloodGroup,
+                            units: 2, // Mock units
+                            hospital: u.address || 'City General Hospital',
+                            level: 'High', // Mock level
+                            actualLat: u.latitude || (userLat + (Math.random() * 0.05 - 0.025)),
+                            actualLng: u.longitude || (userLng + (Math.random() * 0.05 - 0.025)),
+                            phone: u.phone
+                        }));
+                        renderList(userLat, userLng);
+                    })
+                    .catch(err => {
+                        console.error('Error fetching patients:', err);
+                        document.getElementById('patientsList').innerHTML = '<div class="alert alert-danger">Failed to load real-time patients. Is the backend running?</div>';
+                    });
             }
 
             function renderList(userLat, userLng) {
@@ -113,8 +133,6 @@
                 listEl.innerHTML = '';
 
                 let dataWithDistance = patients.map(d => {
-                    d.actualLat = userLat + d.latOffset;
-                    d.actualLng = userLng + d.lngOffset;
                     d.distance = parseFloat(App.calculateDistance(userLat, userLng, d.actualLat, d.actualLng));
                     return d;
                 }).sort((a,b) => {
@@ -159,13 +177,21 @@
                             </div>
                             
                             <div class="d-flex gap-2">
-                                <button class="btn btn-primary-dark flex-grow-1" onclick="alert('Donation Request Accepted! Hospital notified.')"><i class="fa-solid fa-hand-holding-heart me-2"></i> Accept Request</button>
-                                <a href="https://www.google.com/maps/dir/?api=1&destination=${d.actualLat},${d.actualLng}" target="_blank" class="btn btn-outline-dark"><i class="fa-solid fa-diamond-turn-right"></i></a>
+                                <button class="btn btn-success flex-grow-1" onclick="updateStatus(${d.id}, 'Approved')"><i class="fa-solid fa-check me-1"></i> Approve</button>
+                                <button class="btn btn-danger flex-grow-1" onclick="updateStatus(${d.id}, 'Rejected')"><i class="fa-solid fa-xmark me-1"></i> Reject</button>
+                                <button class="btn btn-primary-dark flex-grow-1" onclick="updateStatus(${d.id}, 'Completed')"><i class="fa-solid fa-check-double me-1"></i> Complete</button>
                             </div>
                         </div>
                     `;
                 });
             }
+
+            window.updateStatus = function(id, status) {
+                // In a real application, this would POST to /api/users/{id}/status
+                // For this UI demo, we'll just show the toast and reload.
+                alert(\`Request \${id} marked as \${status}\`);
+                fetchPatientsFromBackend(userMarker.getLatLng().lat, userMarker.getLatLng().lng);
+            };
 
             document.getElementById('btnLocate').addEventListener('click', () => {
                 document.getElementById('loadingData').style.display = 'block';

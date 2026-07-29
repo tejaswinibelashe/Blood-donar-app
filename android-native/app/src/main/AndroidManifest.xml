@@ -35,6 +35,8 @@
         <activity android:name=".LoginActivity" android:theme="@style/Theme.BloodLink.NoActionBar" />
         <activity android:name=".RegisterActivity" android:theme="@style/Theme.BloodLink.NoActionBar" />
         <activity android:name=".ForgotPasswordActivity" android:theme="@style/Theme.BloodLink.NoActionBar" />
+        <activity android:name=".DonorDashboardActivity" android:theme="@style/Theme.BloodLink.NoActionBar" />
+        <activity android:name=".PatientDashboardActivity" android:theme="@style/Theme.BloodLink.NoActionBar" />
 
     </application>
 

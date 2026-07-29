@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="assets/js/auth.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BloodLink - Nearby Donors</title>
@@ -99,6 +100,36 @@
                     </div>
                 </div>
 
+                <!-- Real-Time Donor Table -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card card-dark">
+                            <div class="card-header bg-danger text-white border-0 d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0"><i class="fa-solid fa-table me-2"></i> Real-Time Donor Registry</h5>
+                                <input type="text" id="donorSearch" class="form-control form-control-sm w-25 bg-dark text-white border-secondary" placeholder="Instant Search...">
+                            </div>
+                            <div class="card-body card-body-dark table-responsive">
+                                <table class="table table-dark table-hover align-middle" id="donorTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Blood Group</th>
+                                            <th>Age / Gender</th>
+                                            <th>Mobile</th>
+                                            <th>City</th>
+                                            <th>Status</th>
+                                            <th>Registered Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="donorTableBody">
+                                        <tr><td colspan="7" class="text-center text-muted">Loading live donor data...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -113,13 +144,8 @@
             let map;
             let userMarker;
             
-            // Mock Donors Dataset
-            const donors = [
-                { id: 1, name: 'Michael Smith', group: 'O+', age: 28, latOffset: 0.01, lngOffset: 0.015, phone: '+123456789' },
-                { id: 2, name: 'Emma Johnson', group: 'A-', age: 34, latOffset: -0.02, lngOffset: 0.005, phone: '+987654321' },
-                { id: 3, name: 'David Lee', group: 'AB+', age: 41, latOffset: 0.005, lngOffset: -0.025, phone: '+112233445' },
-                { id: 4, name: 'Sarah Connor', group: 'O-', age: 25, latOffset: -0.015, lngOffset: -0.01, phone: '+554433221' }
-            ];
+            // Will be populated from backend
+            let donors = [];
 
             function initMap(lat, lng) {
                 if(map) { map.remove(); }
@@ -137,17 +163,41 @@
                     })
                 }).addTo(map).bindPopup("<b>You are here!</b>").openPopup();
 
-                renderDonors(lat, lng);
+                fetchDonorsFromBackend(lat, lng);
+            }
+            
+            function fetchDonorsFromBackend(userLat, userLng) {
+                fetch('http://localhost:8080/api/users?role=DONOR')
+                    .then(response => response.json())
+                    .then(data => {
+                        donors = data.map(u => ({
+                            id: u.id,
+                            name: u.fullName,
+                            group: u.bloodGroup,
+                            age: u.age || 25,
+                            gender: u.gender || 'N/A',
+                            city: u.city || 'Unknown',
+                            date: u.createdAt || new Date().toISOString(),
+                            status: 'Active',
+                            actualLat: u.latitude || (userLat + (Math.random() * 0.05 - 0.025)), // fallback
+                            actualLng: u.longitude || (userLng + (Math.random() * 0.05 - 0.025)), // fallback
+                            phone: u.phone
+                        }));
+                        renderDonors(userLat, userLng);
+                        renderDonorTable(donors);
+                    })
+                    .catch(err => {
+                        console.error('Error fetching donors:', err);
+                        document.getElementById('donorsList').innerHTML = '<div class="alert alert-danger">Failed to load real-time donors. Is the backend running?</div>';
+                    });
             }
 
             function renderDonors(userLat, userLng) {
                 const listEl = document.getElementById('donorsList');
                 listEl.innerHTML = '';
 
-                // Calculate real distances based on dynamic offsets
+                // Calculate real distances
                 let donorsWithDistance = donors.map(d => {
-                    d.actualLat = userLat + d.latOffset;
-                    d.actualLng = userLng + d.lngOffset;
                     d.distance = parseFloat(App.calculateDistance(userLat, userLng, d.actualLat, d.actualLng));
                     return d;
                 }).sort((a,b) => a.distance - b.distance);
@@ -185,6 +235,49 @@
                     `;
                 });
             }
+
+            function renderDonorTable(data) {
+                const tbody = document.getElementById('donorTableBody');
+                tbody.innerHTML = '';
+                if(data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center">No donors found</td></tr>';
+                    return;
+                }
+                data.forEach(d => {
+                    const date = new Date(d.date).toLocaleDateString();
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${d.name}</strong></td>
+                            <td><span class="badge bg-danger">${d.group}</span></td>
+                            <td>${d.age} / ${d.gender}</td>
+                            <td>${d.phone}</td>
+                            <td>${d.city}</td>
+                            <td><span class="badge bg-success">${d.status}</span></td>
+                            <td>${date}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            document.getElementById('donorSearch').addEventListener('input', function(e) {
+                const term = e.target.value.toLowerCase();
+                const filtered = donors.filter(d => 
+                    d.name.toLowerCase().includes(term) || 
+                    d.phone.includes(term) || 
+                    d.city.toLowerCase().includes(term) || 
+                    d.group.toLowerCase().includes(term)
+                );
+                renderDonorTable(filtered);
+            });
+
+            document.getElementById('bloodFilter').addEventListener('change', function(e) {
+                const term = e.target.value;
+                if(term === 'all') {
+                    renderDonorTable(donors);
+                } else {
+                    renderDonorTable(donors.filter(d => d.group === term));
+                }
+            });
 
             // Start Geolocation flow
             document.getElementById('btnLocate').addEventListener('click', () => {

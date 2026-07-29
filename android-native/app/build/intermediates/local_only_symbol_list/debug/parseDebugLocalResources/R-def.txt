@@ -11,6 +11,7 @@ drawable bg_chat_bubble_receiver
 drawable bg_chat_bubble_sender
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+id action_logout
 id actvBloodGroup
 id actvRole
 id appBarLayout
@@ -25,6 +26,7 @@ id btnReject
 id btnSend
 id btnSendOtp
 id btnSignIn
+id btnSignOut
 id btnSignUp
 id cardFindDonors
 id cardFindHospitals
@@ -78,6 +80,7 @@ layout activity_splash
 layout activity_welcome
 layout item_blood_request
 layout item_chat_message
+menu menu_dashboard
 mipmap ic_launcher
 mipmap ic_launcher_round
 string app_name

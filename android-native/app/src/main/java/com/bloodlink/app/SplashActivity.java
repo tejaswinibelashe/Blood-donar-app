@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bloodlink.app.R;
+import com.bloodlink.app.util.SessionManager;
 
 public class SplashActivity extends AppCompatActivity {
     @Override
@@ -14,9 +14,25 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        SessionManager sessionManager = new SessionManager(this);
+
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
+            if (sessionManager.isLoggedIn()) {
+                navigateToDashboard(sessionManager.getUserRole());
+            } else {
+                startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
+            }
             finish();
-        }, 2000); // 2 second delay
+        }, 2000);
+    }
+
+    private void navigateToDashboard(String role) {
+        Intent intent;
+        if ("DONOR".equals(role)) {
+            intent = new Intent(this, DonorDashboardActivity.class);
+        } else {
+            intent = new Intent(this, PatientDashboardActivity.class);
+        }
+        startActivity(intent);
     }
 }

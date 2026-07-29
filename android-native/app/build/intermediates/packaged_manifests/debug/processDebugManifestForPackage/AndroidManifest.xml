@@ -71,6 +71,12 @@
         <activity
             android:name="com.bloodlink.app.ForgotPasswordActivity"
             android:theme="@style/Theme.BloodLink.NoActionBar" />
+        <activity
+            android:name="com.bloodlink.app.DonorDashboardActivity"
+            android:theme="@style/Theme.BloodLink.NoActionBar" />
+        <activity
+            android:name="com.bloodlink.app.PatientDashboardActivity"
+            android:theme="@style/Theme.BloodLink.NoActionBar" />
 
         <!-- Needs to be explicitly declared on P+ -->
         <uses-library
