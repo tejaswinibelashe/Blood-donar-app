@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "279191894669",
+    "firebase_url": "https://link-blood-bdaad-default-rtdb.firebaseio.com",
+    "project_id": "link-blood-bdaad",
+    "storage_bucket": "link-blood-bdaad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279191894669:android:49f3a2dc22d2a9a41d80c4",
+        "android_client_info": {
+          "package_name": "com.example.bloodlink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "279191894669-n8dnkkfn5rmiabp0rt4hv5rcpbt3ojsm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgm8hVDmsyalJHsR4bjLyNX4-Tb_xb9WU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "279191894669-n8dnkkfn5rmiabp0rt4hv5rcpbt3ojsm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

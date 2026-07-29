@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloodLink - Web Application</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Firebase SDKs via CDN -->
+    <script type="module" src="js/firebase.js" defer></script>
+    <script type="module" src="js/app.js" defer></script>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header id="main-header" class="hidden">
+        <div class="logo-container">
+            <i class="ri-drop-fill logo-icon"></i>
+            <h1>BloodLink</h1>
+        </div>
+        <nav>
+            <button class="nav-btn active" data-target="dashboard-section"><i class="ri-dashboard-line"></i> Dashboard</button>
+            <button class="nav-btn" data-target="nearby-donors-section"><i class="ri-map-pin-user-line"></i> Nearby Donors</button>
+            <button class="nav-btn" data-target="nearby-patients-section"><i class="ri-heart-pulse-line"></i> Nearby Patients</button>
+            <button class="nav-btn" data-target="hospitals-section"><i class="ri-hospital-line"></i> Hospitals</button>
+            <button class="nav-btn" data-target="search-section"><i class="ri-search-line"></i> Search Donors</button>
+            <button class="nav-btn" data-target="become-donor-section"><i class="ri-hand-heart-line"></i> Become a Donor</button>
+            <button class="nav-btn" data-target="request-section"><i class="ri-add-circle-line"></i> Request Blood</button>
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 0;">
+            <button class="nav-btn" data-target="profile-section"><i class="ri-user-settings-line"></i> My Profile</button>
+            <button class="nav-btn" data-target="about-section"><i class="ri-information-line"></i> About Us</button>
+            <button class="nav-btn" data-target="contact-section"><i class="ri-mail-send-line"></i> Contact Us</button>
+            <button class="nav-btn" data-target="faq-section"><i class="ri-question-answer-line"></i> FAQ</button>
+            <button id="logout-btn" class="nav-btn danger"><i class="ri-logout-box-r-line"></i> Logout</button>
+        </nav>
+    </header>
+
+    <main id="app-container">
+        
+        <!-- Authentication Section -->
+        <section id="auth-section" class="active-section glass-panel auth-panel">
+            <div class="auth-header">
+                <i class="ri-drop-fill large-drop"></i>
+                <h2>Welcome to BloodLink</h2>
+                <p>Save lives, give blood.</p>
+            </div>
+            <form id="login-form">
+                <div class="input-group">
+                    <i class="ri-mail-line"></i>
+                    <input type="email" id="email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <i class="ri-lock-password-line"></i>
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <button type="submit" id="auth-submit-btn" class="primary-btn">Sign In</button>
+            </form>
+            <p id="auth-error" class="error-text hidden"></p>
+            <p class="mt-20" style="font-size: 0.9rem; color: var(--text-muted);">
+                <span id="auth-toggle-text">Don't have an account?</span> 
+                <a href="#" id="auth-toggle-btn" style="color: var(--primary-color); text-decoration: none; font-weight: bold;">Sign Up</a>
+            </p>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="hidden glass-panel" style="max-width: 1000px;">
+            <h2 style="margin-bottom: 2rem;">Welcome Back, <span id="user-display-name" style="color: var(--primary-color)">User</span></h2>
+            
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <i class="ri-user-heart-line"></i>
+                    <h3>Total Donors</h3>
+                    <p id="stat-donors">0</p>
+                </div>
+                <div class="stat-card">
+                    <i class="ri-hospital-line"></i>
+                    <h3>Active Hospitals</h3>
+                    <p id="stat-hospitals">0</p>
+                </div>
+                <div class="stat-card">
+                    <i class="ri-heart-pulse-line"></i>
+                    <h3>Total Patients</h3>
+                    <p id="stat-patients">0</p>
+                </div>
+                <div class="stat-card" style="border-color: var(--primary-color)">
+                    <i class="ri-alert-line" style="color: var(--primary-color)"></i>
+                    <h3 style="color: var(--primary-color)">Emergency Requests</h3>
+                    <p id="stat-emergencies">0</p>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 1rem; border-bottom: 1px solid var(--panel-border); padding-bottom: 0.5rem;">Blood Group Availability</h3>
+            <div class="blood-group-grid" id="dashboard-blood-grid">
+                <!-- JS populated -->
+            </div>
+
+            <h3 style="margin-bottom: 1rem; border-bottom: 1px solid var(--panel-border); padding-bottom: 0.5rem;">Recent Activities</h3>
+            <div id="urgent-requests-list" class="list-container">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+
+        <!-- Nearby Donors Section -->
+        <section id="nearby-donors-section" class="hidden glass-panel" style="max-width: 1000px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <h2><i class="ri-map-pin-user-line" style="color: var(--primary-color)"></i> Nearby Donors</h2>
+                <button class="primary-btn" style="width: auto; padding: 0.5rem 1rem;" onclick="switchSection('become-donor-section')"><i class="ri-add-line"></i> Join as Donor</button>
+            </div>
+            
+            <div class="filter-bar">
+                <input type="text" id="donor-search" placeholder="Search by Name or City...">
+                <select id="donor-filter-group" class="styled-select" style="max-width: 200px;">
+                    <option value="">All Blood Groups</option>
+                    <option value="A+">A+</option><option value="A-">A-</option>
+                    <option value="B+">B+</option><option value="B-">B-</option>
+                    <option value="O+">O+</option><option value="O-">O-</option>
+                    <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                </select>
+            </div>
+
+            <div id="nearby-donors-list" class="profile-grid">
+                <!-- Populated via JS Profile Cards -->
+            </div>
+        </section>
+
+        <!-- Nearby Patients Section -->
+        <section id="nearby-patients-section" class="hidden glass-panel" style="max-width: 1000px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <h2><i class="ri-heart-pulse-line" style="color: var(--primary-color)"></i> Nearby Patients</h2>
+                <button class="primary-btn emergency-btn" style="width: auto; padding: 0.5rem 1rem;" onclick="switchSection('request-section')"><i class="ri-alert-line"></i> Emergency Request</button>
+            </div>
+
+            <div class="filter-bar">
+                <input type="text" id="patient-search" placeholder="Search Hospital or Patient...">
+                <select id="patient-filter-urgency" class="styled-select" style="max-width: 200px;">
+                    <option value="">All Urgency Levels</option>
+                    <option value="Emergency">Emergency</option>
+                    <option value="Urgent">Urgent</option>
+                    <option value="Normal">Normal</option>
+                </select>
+            </div>
+
+            <div id="nearby-patients-list" class="patient-list">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+
+        <!-- Hospitals Section -->
+        <section id="hospitals-section" class="hidden glass-panel" style="max-width: 1000px;">
+            <h2><i class="ri-hospital-line" style="color: var(--primary-color)"></i> Partnered Hospitals</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">Verified hospitals with active blood banks and emergency rooms.</p>
+            
+            <div class="filter-bar">
+                <input type="text" id="hospital-search" placeholder="Search Hospitals...">
+            </div>
+
+            <div id="hospitals-list" class="profile-grid">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+
+        <!-- Search Section -->
+        <section id="search-section" class="hidden glass-panel">
+            <h2>Search Blood Donors</h2>
+            <div class="search-controls">
+                <select id="search-blood-group" class="styled-select">
+                    <option value="">Any Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+                <button id="search-btn" class="primary-btn"><i class="ri-search-line"></i> Search</button>
+            </div>
+            <div id="search-results" class="list-container mt-20">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+
+        <!-- Become a Donor Section -->
+        <section id="become-donor-section" class="hidden glass-panel">
+            <h2><i class="ri-hand-heart-line" style="color: var(--primary-color)"></i> Become a Donor</h2>
+            <div style="text-align: left; margin-bottom: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border-left: 4px solid var(--primary-color);">
+                <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">Why Donate?</h4>
+                <p style="font-size: 0.9rem; line-height: 1.6;">Every drop counts! By registering as a donor, you are taking a pledge to help patients during life-threatening emergencies. Please ensure you have had a good meal, are fully hydrated, and weigh at least 50kg before your donation.</p>
+            </div>
+            <form id="become-donor-form">
+                <div class="input-group">
+                    <input type="text" id="donor-name" placeholder="Full Name" required>
+                </div>
+                <div class="input-group">
+                    <select id="donor-blood-group" class="styled-select" required>
+                        <option value="" disabled selected>Select Blood Group</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <input type="tel" id="donor-phone" placeholder="Phone Number" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="donor-location" placeholder="City / Area" required>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="donor-age" placeholder="Age" min="18" max="65" required>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="donor-weight" placeholder="Weight (kg)" min="50" required>
+                </div>
+                <div class="input-group">
+                    <input type="date" id="donor-last-date" title="Last Donation Date">
+                </div>
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label style="display: flex; align-items: center; gap: 10px; color: white;">
+                        <input type="checkbox" id="donor-diseases" style="width: 20px; height: 20px;"> 
+                        I confirm I have no severe underlying diseases.
+                    </label>
+                </div>
+                <button type="submit" class="primary-btn" style="background: var(--success)"><i class="ri-user-add-line"></i> Register as Donor</button>
+            </form>
+            <p id="request-status-msg" class="hidden mt-20" style="text-align: center; font-weight: bold;"></p>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile-section" class="hidden glass-panel">
+            <h2><i class="ri-user-settings-line" style="color: var(--primary-color)"></i> Patient & Donor Profile</h2>
+            <div class="stat-card" style="text-align: left; max-width: 500px; margin: 0 auto;">
+                <p><strong>Email:</strong> <span id="profile-email">Loading...</span></p>
+                <p><strong>UID:</strong> <span id="profile-uid">Loading...</span></p>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;">
+                <h4 style="color: var(--primary-color); margin-bottom: 10px;">Update Medical Profile</h4>
+                <form id="profile-update-form">
+                    <div class="input-group">
+                        <input type="text" id="profile-name" placeholder="Full Name">
+                    </div>
+                    <div class="input-group">
+                        <select id="profile-role" class="styled-select">
+                            <option value="Patient">I am a Patient</option>
+                            <option value="Donor">I am a Donor</option>
+                            <option value="Both">Both (Patient & Donor)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <textarea id="profile-history" placeholder="Any relevant medical history or current treatments?" rows="3" style="width: 100%; padding: 1rem; border-radius: 8px; border: none; background: rgba(255,255,255,0.05); color: white;"></textarea>
+                    </div>
+                    <button type="button" class="primary-btn" onclick="alert('Profile Updated Successfully!')">Save Profile</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about-section" class="hidden glass-panel">
+            <h2><i class="ri-information-line" style="color: var(--primary-color)"></i> About BloodLink</h2>
+            <div style="line-height: 1.8; text-align: left;">
+                <p><strong>BloodLink</strong> is a revolutionary platform designed to bridge the gap between blood donors and those in critical need.</p>
+                <div class="stat-card" style="margin: 20px 0; border-left: 4px solid var(--primary-color); background: rgba(255,255,255,0.05);">
+                    <h3 style="color: var(--primary-color)">Our Mission</h3>
+                    <p>To eliminate blood shortages in emergencies by providing a real-time, location-based network connecting hospitals, patients, and willing donors.</p>
+                </div>
+                <h4 style="margin-top: 15px;">Why we started</h4>
+                <p>Founded in 2026, we recognized that millions of lives are lost simply because blood isn't available exactly when and where it's needed. Traditional blood banks are often disconnected from immediate emergency situations.</p>
+                <br>
+                <h4 style="margin-top: 15px;">How it Works</h4>
+                <ul style="list-style-type: none; padding-left: 0;">
+                    <li><i class="ri-check-line" style="color: var(--success)"></i> <strong>Real-time Sync:</strong> Integrates seamlessly across Mobile and Web applications.</li>
+                    <li><i class="ri-check-line" style="color: var(--success)"></i> <strong>Location Based:</strong> Finds the absolute closest donors to minimize wait times.</li>
+                    <li><i class="ri-check-line" style="color: var(--success)"></i> <strong>Verified Hospitals:</strong> Works directly with trusted local hospitals.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact-section" class="hidden glass-panel">
+            <h2><i class="ri-mail-send-line" style="color: var(--primary-color)"></i> Contact Us</h2>
+            
+            <div class="stat-card" style="margin-bottom: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <i class="ri-customer-service-2-line" style="font-size: 2rem; color: var(--primary-color);"></i>
+                <h3 style="margin: 10px 0;">24/7 Help Centre</h3>
+                <p style="font-size: 1.5rem; font-weight: bold; color: var(--success); letter-spacing: 2px;">8074254866</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Call us anytime for urgent assistance or queries.</p>
+            </div>
+
+            <form id="contact-form">
+                <div class="input-group">
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                <div class="input-group">
+                    <textarea placeholder="Your Message" rows="4" style="width: 100%; padding: 1rem; border-radius: 8px; border: none; background: rgba(255,255,255,0.05); color: white;" required></textarea>
+                </div>
+                <button type="submit" class="primary-btn">Send Message</button>
+            </form>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq-section" class="hidden glass-panel">
+            <h2><i class="ri-question-answer-line" style="color: var(--primary-color)"></i> Frequently Asked Questions</h2>
+            <div style="text-align: left; margin-top: 1rem;">
+                <h4 style="color: var(--primary-color)">Who can donate blood?</h4>
+                <p style="margin-bottom: 1rem;">Anyone aged 18-65, weighing at least 50kg, and in good health can donate.</p>
+                
+                <h4 style="color: var(--primary-color)">Is the data synced with the mobile app?</h4>
+                <p style="margin-bottom: 1rem;">Yes! The web application and Android application share the exact same real-time database.</p>
+                
+                <h4 style="color: var(--primary-color)">How quickly are emergency requests broadcasted?</h4>
+                <p>Instantly. As soon as you hit submit, all active donors in your vicinity are notified.</p>
+            </div>
+        </section>
+
+        <!-- Request Section -->
+        <section id="request-section" class="hidden glass-panel">
+            <h2><i class="ri-add-circle-line" style="color: var(--primary-color)"></i> Create Emergency Request</h2>
+            
+            <div style="text-align: left; margin-bottom: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border-left: 4px solid var(--primary-color);">
+                <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">Urgent Blood Needed?</h4>
+                <p style="font-size: 0.9rem; line-height: 1.6;">Fill out the form below to instantly notify all registered donors in your vicinity. For critical emergencies, select 'Emergency' to send high-priority push notifications to donors and partner hospitals.</p>
+            </div>
+
+            <form id="blood-request-form">
+                <div class="input-group">
+                    <input type="text" id="patient-name" placeholder="Patient Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="hospital-name" placeholder="Hospital Name & Location" required>
+                </div>
+                <div class="input-group">
+                    <select id="request-blood-group" class="styled-select" required>
+                        <option value="" disabled selected>Select Blood Group Needed</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <select id="urgency-level" class="styled-select" required>
+                        <option value="Normal">Normal</option>
+                        <option value="Urgent">Urgent</option>
+                        <option value="Emergency">Emergency (Critical)</option>
+                    </select>
+                </div>
+                <button type="submit" class="primary-btn emergency-btn">Broadcast Request</button>
+            </form>
+            <p id="request-status" class="hidden"></p>
+        </section>
+
+    </main>
+</body>
+</html>
