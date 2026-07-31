@@ -215,7 +215,8 @@
             submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> Registering...';
             submitBtn.disabled = true;
 
-            fetch('http://localhost:8080/api/auth/register', {
+            const apiHost = (window.location.hostname && window.location.hostname !== '') ? window.location.hostname : 'localhost';
+            fetch(`http://${apiHost}:8080/api/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData)

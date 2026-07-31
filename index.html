@@ -192,8 +192,10 @@
             fetchPatients();
         });
 
+        const apiHost = (window.location.hostname && window.location.hostname !== '') ? window.location.hostname : 'localhost';
+
         function fetchStats() {
-            fetch('http://localhost:8080/api/dashboard/stats')
+            fetch(`http://${apiHost}:8080/api/dashboard/stats`)
                 .then(res => {
                     if(!res.ok) throw new Error('API Error');
                     return res.json();
@@ -227,7 +229,7 @@
         }
 
         function fetchPatients() {
-            fetch('http://localhost:8080/api/users?role=PATIENT')
+            fetch(`http://${apiHost}:8080/api/users?role=PATIENT`)
                 .then(res => res.json())
                 .then(data => {
                     const list = document.getElementById('liveRequestList');

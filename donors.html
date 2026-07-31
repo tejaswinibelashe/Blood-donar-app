@@ -167,7 +167,8 @@
             }
             
             function fetchDonorsFromBackend(userLat, userLng) {
-                fetch('http://localhost:8080/api/users?role=DONOR')
+                const apiHost = (window.location.hostname && window.location.hostname !== '') ? window.location.hostname : 'localhost';
+                fetch(`http://${apiHost}:8080/api/users?role=DONOR`)
                     .then(response => response.json())
                     .then(data => {
                         donors = data.map(u => ({

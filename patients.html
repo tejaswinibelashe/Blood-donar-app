@@ -106,7 +106,8 @@
             }
             
             function fetchPatientsFromBackend(userLat, userLng) {
-                fetch('http://localhost:8080/api/users?role=PATIENT')
+                const apiHost = (window.location.hostname && window.location.hostname !== '') ? window.location.hostname : 'localhost';
+                fetch(`http://${apiHost}:8080/api/users?role=PATIENT`)
                     .then(response => response.json())
                     .then(data => {
                         patients = data.map(u => ({
