@@ -62,13 +62,16 @@ public class RegisterActivity extends AppCompatActivity {
         String email = etEmail.getText().toString().trim();
         String phone = etPhone.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
-        String role = actvRole.getText().toString();
-        String bloodGroup = actvBloodGroup.getText().toString();
+        String role = actvRole.getText().toString().trim();
+        String bloodGroup = actvBloodGroup.getText().toString().trim();
 
         if (fullName.isEmpty() || email.isEmpty() || password.isEmpty() || role.isEmpty()) {
-            Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please fill in all required fields (Name, Email, Password, Role)", Toast.LENGTH_LONG).show();
             return;
         }
+
+        btnRegister.setEnabled(false);
+        Toast.makeText(this, "Signing up...", Toast.LENGTH_SHORT).show();
 
         Map<String, Object> userData = new HashMap<>();
         userData.put("fullName", fullName);
@@ -83,20 +86,32 @@ public class RegisterActivity extends AppCompatActivity {
         apiService.registerUser(userData).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                btnRegister.setEnabled(true);
                 if (response.isSuccessful()) {
-                    Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_LONG).show();
                     finish();
                 } else {
-                    Toast.makeText(RegisterActivity.this, "Registration failed: " + response.code(), Toast.LENGTH_SHORT)
-                            .show();
+                    String errorText = "Registration failed (" + response.code() + ")";
+                    try {
+                        if (response.errorBody() != null) {
+                            errorText = response.errorBody().string();
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error reading errorBody", e);
+                    }
+                    Toast.makeText(RegisterActivity.this, errorText, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                btnRegister.setEnabled(true);
                 Log.e(TAG, "Network error", t);
-                Toast.makeText(RegisterActivity.this, "Connection Failed. Check if backend is running.",
-                        Toast.LENGTH_LONG).show();
+                String msg = "Connection Failed. Ensure phone and laptop are on same Wi-Fi and backend is running.";
+                if (t.getLocalizedMessage() != null) {
+                    msg += "\n" + t.getLocalizedMessage();
+                }
+                Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_LONG).show();
             }
         });
     }

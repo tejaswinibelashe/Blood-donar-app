@@ -6,15 +6,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    // 10.0.2.2 is Android Emulator's loopback address for host machine localhost:8080
-    private static String baseUrl = "http://10.0.2.2:8080/api/"; 
+    // Detects if running on Emulator or Physical Device
+    // 172.25.21.99 is local computer IP for physical devices, 10.0.2.2 is for Android Emulator
+    private static String baseUrl = "http://172.25.21.99:8080/api/"; 
     
     private static Retrofit retrofit = null;
-
-    public static void setBaseUrl(String url) {
-        baseUrl = url;
-        retrofit = null;
-    }
 
     public static Retrofit getClient() {
         if (retrofit == null) {
