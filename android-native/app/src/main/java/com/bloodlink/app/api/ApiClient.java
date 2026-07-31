@@ -6,9 +6,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    // Detects if running on Emulator or Physical Device
-    // 172.25.21.99 is local computer IP for physical devices, 10.0.2.2 is for Android Emulator
-    private static String baseUrl = "http://172.25.21.99:8080/api/"; 
+    // Works over USB cable using 'adb reverse tcp:8080 tcp:8080', or Mobile Hotspot / Emulator
+    private static String baseUrl = "http://localhost:8080/api/"; 
     
     private static Retrofit retrofit = null;
 
